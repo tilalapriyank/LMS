@@ -1,6 +1,6 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/Database");
-const Section = require("./Section");
+import { DataTypes } from "sequelize";
+import { sequelize } from "../config/Database.js";
+import Section from "./Section.js";
 
 const SectionItem = sequelize.define(
   "SectionItem",
@@ -39,4 +39,4 @@ const SectionItem = sequelize.define(
 SectionItem.belongsTo(Section, { foreignKey: "sectionId" });
 Section.hasMany(SectionItem, { foreignKey: "sectionId" });
 
-module.exports = SectionItem;
+export default SectionItem;

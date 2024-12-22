@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/Database');
-const Course = require('./Course');
-const Category = require('./Category');
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/Database.js';
+import Course from './Course.js';
+import Category from './Category.js';
 
 const CourseCategory = sequelize.define(
   'CourseCategory',
@@ -9,7 +9,7 @@ const CourseCategory = sequelize.define(
     courseId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Course,
+        model: Course,  // Ensure Course is fully initialized
         key: 'id',
       },
       allowNull: false,
@@ -17,7 +17,7 @@ const CourseCategory = sequelize.define(
     categoryId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Category,
+        model: Category,  // Ensure Category is fully initialized
         key: 'id',
       },
       allowNull: false,
@@ -28,7 +28,8 @@ const CourseCategory = sequelize.define(
   }
 );
 
+// Define associations after both models are initialized
 Course.belongsToMany(Category, { through: CourseCategory, foreignKey: 'courseId' });
 Category.belongsToMany(Course, { through: CourseCategory, foreignKey: 'categoryId' });
 
-module.exports = CourseCategory;
+export default CourseCategory;

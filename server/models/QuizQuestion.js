@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/Database');
-const Quiz = require('./Quiz');
-const Question = require('./Question');
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/Database.js';
+import Quiz from './Quiz.js';
+import Question from './Question.js';
 
 const QuizQuestion = sequelize.define(
   'QuizQuestion',
@@ -43,4 +43,4 @@ Quiz.hasMany(QuizQuestion, { foreignKey: 'quizId' });
 QuizQuestion.belongsTo(Question, { foreignKey: 'questionId' });
 Question.hasMany(QuizQuestion, { foreignKey: 'questionId' });
 
-module.exports = QuizQuestion;
+export default QuizQuestion;

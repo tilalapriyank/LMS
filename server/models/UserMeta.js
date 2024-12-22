@@ -1,6 +1,6 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/Database");
-const User = require("./User");
+import { DataTypes } from "sequelize";
+import { sequelize } from "../config/Database.js";
+import User from "./User.js";
 
 const UserMeta = sequelize.define(
   "UserMeta",
@@ -36,4 +36,4 @@ const UserMeta = sequelize.define(
 UserMeta.belongsTo(User, { foreignKey: "userId" });
 User.hasMany(UserMeta, { foreignKey: "userId" });
 
-module.exports = UserMeta;
+export default UserMeta;

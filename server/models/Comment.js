@@ -1,6 +1,6 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/Database");
-const Course = require("./Course");
+import { DataTypes } from "sequelize";
+import { sequelize } from "../config/Database.js";
+import Course from "./Course.js";
 
 const Comment = sequelize.define(
   "Comment",
@@ -47,4 +47,5 @@ const Comment = sequelize.define(
 Comment.belongsTo(Course, { foreignKey: "courseId" });
 Course.hasMany(Comment, { foreignKey: "courseId" });
 
-module.exports = Comment;
+// export default Comment;
+export default Comment;

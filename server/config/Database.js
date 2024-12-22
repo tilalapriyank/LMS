@@ -1,6 +1,5 @@
-import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
-import { User, UserMeta, Tag, SectionItem, Section, QuizQuestion, Quiz, Question, Lesson, CourseTag, CourseCategory, Course, Comment, Category } from '../models/index.js';
+import { Sequelize } from "sequelize";
 
 dotenv.config();
 
@@ -21,7 +20,7 @@ const connectDB = async () => {
     await sequelize.authenticate();
     console.log("MySQL Connected...");
     // Sync the database
-    await sequelize.sync();
+    await sequelize.sync({ force: false, logging: console.log });
     console.log("Database synced...");
   } catch (err) {
     console.error("Unable to connect to the database:", err);
@@ -29,5 +28,5 @@ const connectDB = async () => {
   }
 };
 
-// Export the connectDB function
+// Export the connectDB function and sequelize instance as a named export
 export { connectDB, sequelize };

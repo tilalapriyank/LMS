@@ -1,6 +1,6 @@
 import express from "express";
 import { connectDB } from "./config/Database.js";
-import User from './models/User.js';
+import User from "./models/User.js";
 import UserMeta from "./models/UserMeta.js";
 
 const app = express();
