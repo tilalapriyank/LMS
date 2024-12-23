@@ -1,7 +1,5 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/Database.js";
-import QuizQuestion from "./QuizQuestion.js";
-import Question from "./Question.js";
 
 const Quiz = sequelize.define(
   "Quiz",
@@ -16,7 +14,7 @@ const Quiz = sequelize.define(
       allowNull: false,
     },
     content: {
-      type: DataTypes.LONGTEXT, 
+      type: DataTypes.TEXT("long"), 
       allowNull: false,
     },
     status: {
@@ -34,13 +32,8 @@ const Quiz = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   }
 );
-
-Quiz.belongsToMany(Question, { through: QuizQuestion, foreignKey: "quizId" });
-Question.belongsToMany(Quiz, {
-  through: QuizQuestion,
-  foreignKey: "questionId",
-});
 
 export default Quiz;

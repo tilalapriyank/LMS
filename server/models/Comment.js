@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/Database.js";
-import Course from "./Course.js";
 
 const Comment = sequelize.define(
   "Comment",
@@ -13,7 +12,7 @@ const Comment = sequelize.define(
     courseId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Course,
+        model: 'Course',
         key: "id",
       },
       allowNull: false,
@@ -31,7 +30,7 @@ const Comment = sequelize.define(
       defaultValue: DataTypes.NOW,
     },
     content: {
-      type: DataTypes.LONGTEXT,
+      type: DataTypes.TEXT("long"),
       allowNull: false,
     },
     status: {
@@ -41,11 +40,10 @@ const Comment = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   }
 );
 
-Comment.belongsTo(Course, { foreignKey: "courseId" });
-Course.hasMany(Comment, { foreignKey: "courseId" });
 
 // export default Comment;
 export default Comment;

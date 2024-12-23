@@ -20,6 +20,7 @@ const Tag = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   }
 );
 

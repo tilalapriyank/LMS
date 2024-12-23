@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/Database.js";
-import Course from "./Course.js";
 
 const Lesson = sequelize.define(
   "Lesson",
@@ -15,7 +14,7 @@ const Lesson = sequelize.define(
       allowNull: false,
     },
     content: {
-      type: DataTypes.LONGTEXT, 
+      type: DataTypes.TEXT("long"), 
       allowNull: false,
     },
     status: {
@@ -33,10 +32,8 @@ const Lesson = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   }
 );
-
-Lesson.belongsTo(Course, { foreignKey: "courseId" });
-Course.hasMany(Lesson, { foreignKey: "courseId" });
 
 export default Lesson;

@@ -1,7 +1,5 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/Database.js';
-import Course from './Course.js';
-import Tag from './Tag.js';
 
 const CourseTag = sequelize.define(
   'CourseTag',
@@ -9,7 +7,7 @@ const CourseTag = sequelize.define(
     courseId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Course,
+        model: 'Course',
         key: 'id',
       },
       allowNull: false,
@@ -17,7 +15,7 @@ const CourseTag = sequelize.define(
     tagId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Tag,
+        model: 'Tag',
         key: 'id',
       },
       allowNull: false,
@@ -25,11 +23,10 @@ const CourseTag = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   }
 );
 
-Course.belongsToMany(Tag, { through: CourseTag, foreignKey: 'courseId' });
-Tag.belongsToMany(Course, { through: CourseTag, foreignKey: 'tagId' });
 
-// export default CourseTag;
+
 export default CourseTag;

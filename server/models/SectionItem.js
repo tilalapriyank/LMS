@@ -13,7 +13,7 @@ const SectionItem = sequelize.define(
     sectionId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Section,
+        model: 'Section',
         key: "id",
       },
       allowNull: false,
@@ -33,10 +33,9 @@ const SectionItem = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   }
 );
 
-SectionItem.belongsTo(Section, { foreignKey: "sectionId" });
-Section.hasMany(SectionItem, { foreignKey: "sectionId" });
 
 export default SectionItem;

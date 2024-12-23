@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/Database.js";
-import Course from "./Course.js";
 
 const Section = sequelize.define(
   "Section",
@@ -13,7 +12,7 @@ const Section = sequelize.define(
     courseId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Course,
+        model: 'Course',
         key: "id",
       },
       allowNull: false,
@@ -33,10 +32,9 @@ const Section = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   }
 );
 
-Section.belongsTo(Course, { foreignKey: "courseId" });
-Course.hasMany(Section, { foreignKey: "courseId" });
 
 export default Section;

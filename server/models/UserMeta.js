@@ -14,7 +14,7 @@ const UserMeta = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: User,
+        model: 'User',
         key: "id",
       },
       onDelete: "CASCADE",
@@ -30,10 +30,9 @@ const UserMeta = sequelize.define(
   },
   {
     timestamps: false, 
+    freezeTableName: true,
   }
 );
 
-UserMeta.belongsTo(User, { foreignKey: "userId" });
-User.hasMany(UserMeta, { foreignKey: "userId" });
 
 export default UserMeta;

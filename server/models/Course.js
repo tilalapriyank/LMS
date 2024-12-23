@@ -1,9 +1,5 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/Database.js";
-import Category from "./Category.js";
-import Tag from "./Tag.js";
-import CourseCategory from "./CourseCategory.js";
-import CourseTag from "./CourseTag.js";
 
 const Course = sequelize.define(
   "Course",
@@ -18,7 +14,7 @@ const Course = sequelize.define(
       allowNull: false,
     },
     content: {
-      type: DataTypes.LONGTEXT,
+      type: DataTypes.TEXT("long"),
       allowNull: false,
     },
     status: {
@@ -36,13 +32,8 @@ const Course = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   }
 );
-
-Course.belongsToMany(Category, {
-  through: CourseCategory,
-  foreignKey: "courseId",
-});
-Course.belongsToMany(Tag, { through: CourseTag, foreignKey: "courseId" });
 
 export default Course; // Default export

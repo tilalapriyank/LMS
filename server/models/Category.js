@@ -20,6 +20,7 @@ const Category = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   }
 );
 

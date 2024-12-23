@@ -14,7 +14,7 @@ const QuizQuestion = sequelize.define(
     quizId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Quiz,
+        model: 'Quiz',
         key: 'id',
       },
       allowNull: false,
@@ -22,7 +22,7 @@ const QuizQuestion = sequelize.define(
     questionId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Question,
+        model: 'Question',
         key: 'id',
       },
       allowNull: false,
@@ -34,6 +34,7 @@ const QuizQuestion = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   }
 );
 

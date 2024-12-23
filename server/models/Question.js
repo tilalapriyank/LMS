@@ -28,6 +28,7 @@ const Question = sequelize.define(
   },
   {
     timestamps: true,
+    freezeTableName: true,
   }
 );
 

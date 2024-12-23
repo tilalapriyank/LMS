@@ -1,14 +1,29 @@
-import User from "../models/User.js";
-import UserMeta from "../models/UserMeta.js";
-import Course from "../models/Course.js";
-import Lesson from "../models/Lesson.js";
-import Quiz from "../models/Quiz.js";
-import Question from "../models/Question.js";
-import Category from "../models/Category.js";
-import Tag from "../models/Tag.js";
-import Section from "../models/Section.js";
-import Comment from "../models/Comment.js";
-
 import { connectDB } from "./Database.js";
+import {
+  User,
+  UserMeta,
+  Course,
+  Lesson,
+  Quiz,
+  Question,
+  Category,
+  Tag,
+  Section,
+  Comment,
+  CourseTag,
+  CourseCategory,
+  QuizQuestion,
+  SectionItem,
+  setupAssociations,
+} from "../models/index.js";
 
-connectDB();
+export const initializeDatabase = async () => {
+  try {
+    await connectDB();
+    setupAssociations();
+    console.log("Database connected and associations setup successfully.");
+  } catch (error) {
+    console.error("Database initialization failed:", error.message);
+    process.exit(1); // Exit the process with failure
+  }
+};
