@@ -1,41 +1,24 @@
-import React from "react";
-import { Box, Typography, Button, Container, Grid } from "@mui/material";
+import React from 'react';
+import { Box, Button, Typography, Container } from '@mui/material';
 
 const HeroSection = () => {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundImage: "url('/path/to/your/image.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        height: "60vh",
-        color: "white",
-        textAlign: "center",
-        padding: "20px",
-      }}
-    >
+    <Box sx={{ backgroundColor: '#1976d2', color: 'white', py: 8 }}>
       <Container>
-        <Typography variant="h2" sx={{ fontWeight: "bold", mb: 2 }}>
-          Welcome to Our Learning Platform
+        <Typography variant="h2" align="center" gutterBottom>
+          Welcome to the LMS Platform
         </Typography>
-        <Typography variant="h6" sx={{ mb: 4 }}>
-          Enhance your skills with our top-rated online courses. Learn from experts and become proficient in your field.
+        <Typography variant="h6" align="center" paragraph>
+          Discover top-quality courses to enhance your skills. Join now or explore as a guest.
         </Typography>
-        <Grid container justifyContent="center" spacing={2}>
-          <Grid item>
-            <Button variant="contained" color="primary" size="large">
-              Explore Courses
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button variant="outlined" color="secondary" size="large">
-              Become an Instructor
-            </Button>
-          </Grid>
-        </Grid>
+        <Box sx={{ textAlign: 'center' }}>
+          <Button variant="contained" color="secondary" sx={{ mx: 2 }}>
+            Explore Courses
+          </Button>
+          <Button variant="outlined" color="inherit" sx={{ mx: 2 }}>
+            Become an Instructor
+          </Button>
+        </Box>
       </Container>
     </Box>
   );
