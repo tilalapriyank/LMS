@@ -25,7 +25,7 @@ const RegistrationForm = () => {
       const response = await registerUser(userData);
       if (response.success) {
         alert('Registration successful');
-        navigate.push('/login');
+        navigate('/login');
       } else {
         alert(response.message || 'Registration failed');
       }
