@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../../api/registrationUser';
 
 const RegistrationForm = () => {
-  const [username, setUsername] = useState('');
+  const [name, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -19,7 +19,7 @@ const RegistrationForm = () => {
       return;
     }
 
-    const userData = { username, email, password, role };
+    const userData = { name, email, password, role };
 
     try {
       const response = await registerUser(userData);
@@ -46,7 +46,7 @@ const RegistrationForm = () => {
         fullWidth
         variant="outlined"
         margin="normal"
-        value={username}
+        value={name}
         onChange={(e) => setUsername(e.target.value)}
       />
       <TextField
