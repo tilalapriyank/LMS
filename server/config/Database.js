@@ -11,7 +11,6 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST || "localhost",
     dialect: "mysql",
-    logging: console.log,
   }
 );
 
@@ -19,7 +18,7 @@ const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log("MySQL Connected...");
-    await sequelize.sync({ alter: true, logging: console.log });
+    await sequelize.sync({ alter: true});
     console.log("Database synced...");
   } catch (err) {
     console.error("Unable to connect to the database:", err);
