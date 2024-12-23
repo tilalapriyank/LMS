@@ -19,7 +19,6 @@ const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log("MySQL Connected...");
-    // Sync the database
     await sequelize.sync({ alter: true, logging: console.log });
     console.log("Database synced...");
   } catch (err) {
@@ -28,5 +27,4 @@ const connectDB = async () => {
   }
 };
 
-// Export the connectDB function and sequelize instance as a named export
 export { connectDB, sequelize };
