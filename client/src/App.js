@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Container, CssBaseline } from "@mui/material";
+import { Box, CssBaseline } from "@mui/material";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
@@ -10,21 +10,23 @@ import Home from "./pages/home/Home";
 const App = () => {
   return (
     <Router>
-      <CssBaseline /> {/* This provides a consistent base styling */}
+      <CssBaseline />
       <Box
         sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
         <Header />
-        <Box sx={{ flexGrow: 1, bgcolor: "background.default", py: 4 }}>
-          <Container>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<RegistrationPage />} />
-            </Routes>
-          </Container>
+        <Box
+          sx={{
+            flexGrow: 1,
+            bgcolor: "background.default"
+          }}
+        >
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<RegistrationPage />} />
+          </Routes>
         </Box>
-
         <Footer />
       </Box>
     </Router>

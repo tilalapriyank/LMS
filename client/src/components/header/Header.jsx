@@ -1,13 +1,15 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { AppBar, Toolbar, Typography, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <AppBar position="static" sx={{ height: 64 }}> {/* Custom height */}
+    <AppBar position="static" sx={{ height: 64 }}>
       <Toolbar>
         <Typography variant="h6" style={{ flexGrow: 1 }}>
-          LMS Platform
+          <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
+            LMS
+          </Link>
         </Typography>
         <Button component={Link} to="/login" color="inherit">
           Login
