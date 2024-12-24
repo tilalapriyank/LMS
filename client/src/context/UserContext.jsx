@@ -5,7 +5,7 @@ const UserContext = createContext();
 
 // Provider component
 const UserProvider = ({ children }) => {
-  const [role, setRole] = useState(null); // Default role is null or you can set a default role
+  const [role, setRole] = useState('admin'); // Default role is null or you can set a default role
 
   const login = (userRole) => {
     setRole(userRole); // Set the role when the user logs in
