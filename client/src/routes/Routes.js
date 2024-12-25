@@ -3,10 +3,8 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
-import AdminPage from "../pages/AdminPage";
 import InstructorPage from "../pages/InstructorPage";
 import StudentPage from "../pages/StudentPage";
 import Login from "../pages/login/Login";
@@ -17,9 +15,6 @@ import Home from "../pages/home/Home";
 import AdminDashboard from "../pages/admin/dashboard/AdminDashboard";
 import { Box } from "@mui/material";
 
-const ProtectedRoute = ({ element, allowedRole, userRole }) => {
-  return userRole === allowedRole ? element : <Navigate to="/login" />;
-};
 
 const RoutesComponent = () => {
   const { role, isAuthenticated } = useContext(UserContext); // Get user role and authentication status
