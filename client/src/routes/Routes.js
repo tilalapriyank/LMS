@@ -1,5 +1,10 @@
 import React, { useContext } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import AdminPage from "../pages/AdminPage";
 import InstructorPage from "../pages/InstructorPage";
@@ -9,15 +14,17 @@ import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
 import RegistrationPage from "../pages/registration/RegistrationPage";
 import Home from "../pages/home/Home";
-import Dashboard  from "../pages/admin/dashboard/AdminDashboard";
+import AdminDashboard from "../pages/admin/dashboard/AdminDashboard";
 import { Box } from "@mui/material";
 
-const RoutesComponent = () => {
-  const { role } = useContext(UserContext); // Get the user role
+const ProtectedRoute = ({ element, allowedRole, userRole }) => {
+  return userRole === allowedRole ? element : <Navigate to="/login" />;
+};
 
+const RoutesComponent = () => {
+  const { role, isAuthenticated } = useContext(UserContext); // Get user role and authentication status
   return (
     <Router>
-      {/* Header */}
       <Box
         component="header"
         sx={{
@@ -33,21 +40,26 @@ const RoutesComponent = () => {
         sx={{
           flex: 1,
           backgroundColor: "#ffffff",
-          minHeight: "calc(100vh - 160px)", // Dynamic height calculation
+          minHeight: "calc(100vh - 160px)",
         }}
       >
         <Routes>
-          {role === "admin" && <Route path="/admin" element={<AdminPage />} />}
-          {role === "instructor" && (
-            <Route path="/instructor" element={<InstructorPage />} />
-          )}
-          {role === "student" && (
-            <Route path="/student" element={<StudentPage />} />
-          )}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegistrationPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              isAuthenticated ?  (
+                  <AdminDashboard />
+                ) : role === "instructor" ? (
+                  <InstructorPage />
+                ) : (
+                  <StudentPage />
+                )
+              
+            }
+          />
           <Route path="*" element={<Home />} />
-          <Route path="dashboard" element={<Dashboard  />} />
         </Routes>
       </Box>
 
