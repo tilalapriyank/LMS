@@ -1,14 +1,15 @@
 import React from 'react';
-import { Box, Toolbar, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import DashboardContent from './content/main';
-
+// import Course from "./content/Course";
+import AddEditCourse from "./content/AddEditCourse";
 const MainContent = ({ selectedMenu }) => {
   const getContent = () => {
     switch (selectedMenu) {
       case 'Dashboard':
         return <DashboardContent />;
       case 'Course':
-        return <Typography>Manage your Courses here.</Typography>;
+        return <AddEditCourse />;
       case 'Lesson':
         return <Typography>Create and edit Lessons.</Typography>;
       case 'Quiz':
@@ -37,7 +38,6 @@ const MainContent = ({ selectedMenu }) => {
         width: { sm: `calc(100% - 240px)` },
       }}
     >
-      <Toolbar />
       {getContent()}
     </Box>
   );

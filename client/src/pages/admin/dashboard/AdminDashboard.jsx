@@ -6,7 +6,7 @@ import MainContent from '../../../components/admin/dashboard/MainContent';
 
 const Dashboard = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [selectedMenu, setSelectedMenu] = useState('Home'); // State for selected menu
+    const [selectedMenu, setSelectedMenu] = useState('Dashboard'); // State for selected menu
   
     const handleDrawerToggle = () => {
       setMobileOpen(!mobileOpen);
