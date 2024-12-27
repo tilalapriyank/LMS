@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import DashboardContent from './content/main';
 // import Course from "./content/Course";
-import AddEditCourse from "./content/AddEditCourse";
+import AddEditCourse from "../dashboard/content/course/AddEditCourse";
 const MainContent = ({ selectedMenu }) => {
   const getContent = () => {
     switch (selectedMenu) {
