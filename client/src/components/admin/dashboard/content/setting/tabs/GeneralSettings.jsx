@@ -1,35 +1,46 @@
 import React, { useState } from "react";
-import { Card, CardContent, Button, TextField, Typography, FormControlLabel, Switch, Grid, Box, MenuItem, Select, InputLabel, FormControl } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Button,
+  TextField,
+  Typography,
+  FormControlLabel,
+  Switch,
+  Grid,
+  Box,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
 
 const GeneralSettings = () => {
-  const [rowsPerPage, setRowsPerPage] = useState(10); // Default rows per page
-  const [allowInstructorPublish, setAllowInstructorPublish] = useState(true); // Default: Instructors can publish
-  const [showBecomeInstructor, setShowBecomeInstructor] = useState(true); // Default: Show Become Instructor button
-  const [dateFormat, setDateFormat] = useState("DD/MM/YYYY"); // Default date format
-  const [currency, setCurrency] = useState("USD"); // Default currency
-  const [fontSize, setFontSize] = useState(14); // Default font size
-  const [theme, setTheme] = useState("light"); // Default theme
-  const [screenReaderEnabled, setScreenReaderEnabled] = useState(false); // Default screen reader compatibility
-  const [keyboardShortcutsEnabled, setKeyboardShortcutsEnabled] = useState(false); // Default keyboard shortcuts
-  const [language, setLanguage] = useState("en"); // Default language
-  const [rtlEnabled, setRtlEnabled] = useState(false); // Default RTL support
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [allowInstructorPublish, setAllowInstructorPublish] = useState(true);
+  const [showBecomeInstructor, setShowBecomeInstructor] = useState(true);
+  const [dateFormat, setDateFormat] = useState("DD/MM/YYYY");
+  const [currency, setCurrency] = useState("USD");
+  const [fontSize, setFontSize] = useState(14);
+  const [theme, setTheme] = useState("light");
+  const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
+  const [keyboardShortcutsEnabled, setKeyboardShortcutsEnabled] = useState(false);
+  const [language, setLanguage] = useState("en");
+  const [rtlEnabled, setRtlEnabled] = useState(false);
 
   const handleSubmit = () => {
     alert("General settings saved!");
   };
 
   return (
-    <Box sx={{ flexGrow: 1, marginTop: 2 }}>
-      <Grid container spacing={2} justifyContent="space-between">
+    <Box sx={{ flexGrow: 1, margin: 3 }}>
+      <Grid container spacing={3}>
         {/* Pagination Card */}
-        <Grid item xs={12} sm={4}>
-          <Card sx={{ width: "100%" }}>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ height: "100%" }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Pagination (Rows Per Page)
-              </Typography>
-              <Typography variant="body2" color="textSecondary" paragraph>
-                Set the number of rows to be displayed per page.
               </Typography>
               <TextField
                 type="number"
@@ -42,15 +53,12 @@ const GeneralSettings = () => {
           </Card>
         </Grid>
 
-        {/* Allow Instructors To Publish Courses Card */}
-        <Grid item xs={12} sm={4}>
-          <Card sx={{ width: "100%" }}>
+        {/* Allow Instructors To Publish Courses */}
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ height: "100%" }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Allow Instructors To Publish Courses
-              </Typography>
-              <Typography variant="body2" color="textSecondary" paragraph>
-                Enable instructors to publish the course directly. If disabled, admins will review content before publishing.
               </Typography>
               <FormControlLabel
                 control={
@@ -65,15 +73,12 @@ const GeneralSettings = () => {
           </Card>
         </Grid>
 
-        {/* Become an Instructor Button Card */}
-        <Grid item xs={12} sm={4}>
-          <Card sx={{ width: "100%" }}>
+        {/* Become an Instructor Button */}
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ height: "100%" }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Become an Instructor Button
-              </Typography>
-              <Typography variant="body2" color="textSecondary" paragraph>
-                Enable the option to display this button on the student dashboard.
               </Typography>
               <FormControlLabel
                 control={
@@ -88,9 +93,9 @@ const GeneralSettings = () => {
           </Card>
         </Grid>
 
-        {/* Date Format Card */}
-        <Grid item xs={12} sm={4}>
-          <Card sx={{ width: "100%" }}>
+        {/* Date Format */}
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ height: "100%" }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Date Format
@@ -111,9 +116,9 @@ const GeneralSettings = () => {
           </Card>
         </Grid>
 
-        {/* Currency Card */}
-        <Grid item xs={12} sm={4}>
-          <Card sx={{ width: "100%" }}>
+        {/* Currency */}
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ height: "100%" }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Currency
@@ -134,9 +139,9 @@ const GeneralSettings = () => {
           </Card>
         </Grid>
 
-        {/* Font Size & Theme Card */}
-        <Grid item xs={12} sm={4}>
-          <Card sx={{ width: "100%" }}>
+        {/* Font Size & Theme */}
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ height: "100%" }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Font Size & Theme
@@ -164,9 +169,9 @@ const GeneralSettings = () => {
           </Card>
         </Grid>
 
-        {/* Screen Reader Compatibility Card */}
-        <Grid item xs={12} sm={4}>
-          <Card sx={{ width: "100%" }}>
+        {/* Screen Reader Compatibility */}
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ height: "100%" }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Screen Reader Compatibility
@@ -185,9 +190,9 @@ const GeneralSettings = () => {
           </Card>
         </Grid>
 
-        {/* Keyboard Shortcuts Card */}
-        <Grid item xs={12} sm={4}>
-          <Card sx={{ width: "100%" }}>
+        {/* Keyboard Shortcuts */}
+        <Grid item xs={12} sm={6} md={3}>
+          <Card sx={{ height: "100%" }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Keyboard Shortcuts
@@ -205,54 +210,10 @@ const GeneralSettings = () => {
             </CardContent>
           </Card>
         </Grid>
-
-        {/* Language Selection Card */}
-        <Grid item xs={12} sm={4}>
-          <Card sx={{ width: "100%" }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Language Selection
-              </Typography>
-              <FormControl fullWidth margin="normal">
-                <InputLabel>Language</InputLabel>
-                <Select
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
-                  label="Language"
-                >
-                  <MenuItem value="en">English</MenuItem>
-                  <MenuItem value="es">Spanish</MenuItem>
-                  <MenuItem value="fr">French</MenuItem>
-                </Select>
-              </FormControl>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* RTL Support Card */}
-        <Grid item xs={12} sm={4}>
-          <Card sx={{ width: "100%" }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                RTL (Right-to-Left) Support
-              </Typography>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={rtlEnabled}
-                    onChange={(e) => setRtlEnabled(e.target.checked)}
-                    color="primary"
-                  />
-                }
-                label="Enable RTL Support"
-              />
-            </CardContent>
-          </Card>
-        </Grid>
       </Grid>
 
       {/* Submit Button */}
-      <Box sx={{ textAlign: "center", marginTop: 2 }}>
+      <Box sx={{ textAlign: "center", marginTop: 3 }}>
         <Button onClick={handleSubmit} variant="contained" color="primary" sx={{ width: "200px" }}>
           Save Settings
         </Button>
