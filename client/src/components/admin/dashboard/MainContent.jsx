@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material';
 import DashboardContent from './content/main';
 // import Course from "./content/Course";
 import AddEditCourse from "../dashboard/content/course/AddEditCourse";
+import Setting from "./content/setting/Setting";
 const MainContent = ({ selectedMenu }) => {
   const getContent = () => {
     switch (selectedMenu) {
@@ -21,7 +22,7 @@ const MainContent = ({ selectedMenu }) => {
       case 'Tags':
         return <Typography>Tag your content for better searchability.</Typography>;
       case 'Settings':
-        return <Typography>Adjust application settings here.</Typography>;
+        return <Setting />;
       case 'Users':
         return <Typography>Manage Users and their roles.</Typography>;
       default:
