@@ -1,0 +1,68 @@
+export const payment = [
+    {
+      id: "paymentGateways",
+      title: "Payment Gateways",
+      description: "Choose the payment gateways available for transactions.",
+      type: "select",
+      options: ["PayPal", "Stripe", "Razorpay", "Bank Transfer", "Other"],
+      value: "PayPal", 
+    },
+    {
+      id: "paymentConfirmationEmail",
+      title: "Payment Confirmation Email",
+      description: "Enable or disable email notifications after a successful payment.",
+      type: "switch",
+      value: true, 
+    },
+    {
+      id: "taxSettings",
+      title: "Tax Settings",
+      description: "Set up tax rates for different regions.",
+      type: "text",
+      value: "GST 18%", 
+    },
+    {
+      id: "currency",
+      title: "Currency",
+      description: "Choose the default currency for transactions.",
+      type: "select",
+      options: ["USD", "EUR", "INR", "GBP", "AUD"],
+      value: "USD", 
+    },
+    {
+      id: "paymentReceipt",
+      title: "Payment Receipt",
+      description: "Allow the system to generate and send receipts after payment.",
+      type: "switch",
+      value: true, 
+    },
+    {
+      id: "paymentRedirectURL",
+      title: "Payment Redirect URL",
+      description: "Set the URL to redirect users after a successful payment.",
+      type: "text",
+      value: "https://example.com/thank-you",
+    }, 
+    {
+      id: "enableSubscription",
+      title: "Enable Subscription Payments",
+      description: "Enable recurring subscription-based payments.",
+      type: "switch",
+      value: false, 
+    },
+    {
+      id: "refundPolicy",
+      title: "Refund Policy",
+      description: "Set the conditions for refunding payments.",
+      type: "textarea",
+      value: "Refunds are processed within 30 days of payment.", 
+    },
+    {
+      id: "paymentSecurity",
+      title: "Payment Security",
+      description: "Enable enhanced payment security features like 3D Secure.",
+      type: "switch",
+      value: true, 
+    },
+  ];
+  

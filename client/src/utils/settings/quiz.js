@@ -1,0 +1,57 @@
+export const quiz = [
+    {
+      id: "questionOrder",
+      title: "Question Order",
+      description: "Set the order in which the questions are displayed.",
+      type: "select",
+      options: ["random", "sequential"],
+      value: "random", 
+    },
+    {
+      id: "questionLayout",
+      title: "Question Layout",
+      description: "Choose the layout for displaying quiz questions.",
+      type: "select",
+      options: ["single", "multi-column"],
+      value: "single", 
+    },
+    {
+      id: "quizFeedbackMode",
+      title: "Quiz Feedback Mode",
+      description: "Set when feedback is shown to the user during or after the quiz.",
+      type: "select",
+      options: ["immediately", "after-submit", "after-timeout"],
+      value: "after-submit", 
+    },
+    {
+      id: "hideQuizTime",
+      title: "Hide Quiz Time",
+      description: "Hide or show the timer during the quiz.",
+      type: "switch",
+      value: false, 
+    },
+    {
+      id: "hideQuestionNumber",
+      title: "Hide Question Number",
+      description: "Set whether or not to show question numbers during the quiz.",
+      type: "switch",
+      value: false,
+    },
+    {
+      id: "whenTimeExpires",
+      title: "When Time Expires",
+      description: "Define the action when the quiz time expires.",
+      type: "select",
+      options: ["submit-automatically", "show-warning", "pause"],
+      value: "submit-automatically",
+    }, 
+    {
+      id: "finalGradeCalculation",
+      title: "Final Grade Calculation",
+      description: "Define how the final grade is calculated for the quiz.",
+      type: "select",
+      options: ["percentage", "points", "custom"],
+      value: "percentage", 
+    },
+  ];
+  

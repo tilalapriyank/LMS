@@ -1,11 +1,7 @@
-import React, { useState } from "react";
-import { Tab, Tabs, Box } from "@mui/material";
-import GeneralSettings from "./tabs/GeneralSettings";
-import CourseSettings from "./tabs/CourseSettings";
-import QuizSettings from "./tabs/QuizSettings";
-import LessonSettings from "./tabs/LessonSettings";
-import ProfileSettings from "./tabs/ProfileSettings";
-import PaymentSettings from "./tabs/PaymentSettings";
+import React, { useState, Suspense } from "react";
+import { Tab, Tabs, Box, Grid } from "@mui/material";
+import { settingsTabs } from "../../../../../utils/setting";
+import DynamicSettings from "./DynamicSettings";
 
 const Setting = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -23,21 +19,42 @@ const Setting = () => {
         textColor="primary"
         aria-label="settings tabs"
       >
-        <Tab label="General" />
-        <Tab label="Course" />
-        <Tab label="Quiz" />
-        <Tab label="Lesson" />
-        <Tab label="Profile" />
-        <Tab label="Payment" />
+        {settingsTabs.map((tab, index) => (
+          <Tab
+            key={tab.name}
+            label={tab.label}
+            id={`tab-${index}`}
+            aria-controls={`tabpanel-${index}`}
+          />
+        ))}
       </Tabs>
 
       <Box sx={{ padding: 2 }}>
-        {selectedTab === 0 && <GeneralSettings />}
-        {selectedTab === 1 && <CourseSettings />}
-        {selectedTab === 2 && <QuizSettings />}
-        {selectedTab === 3 && <LessonSettings />}
-        {selectedTab === 4 && <ProfileSettings />}
-        {selectedTab === 5 && <PaymentSettings />}
+        <Suspense fallback={<div>Loading...</div>}>
+          {settingsTabs.map((tab, index) => {
+            return (
+              selectedTab === index && (
+                <Box
+                  role="tabpanel"
+                  hidden={selectedTab !== index}
+                  id={`tabpanel-${index}`}
+                  aria-labelledby={`tab-${index}`}
+                  key={tab.name}
+                >
+                  <Grid container spacing={2}>
+                    {tab.settings.map((settingData, i) => (
+                      <Grid item xs={12} sm={6} md={3} key={i}>
+                        <DynamicSettings
+                          settings={[settingData]}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Box>
+              )
+            );
+          })}
+        </Suspense>
       </Box>
     </Box>
   );
