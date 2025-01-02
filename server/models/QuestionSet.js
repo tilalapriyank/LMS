@@ -1,13 +1,13 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/Database.js';
 
-const CourseCategory = sequelize.define(
-  'CourseCategory',
+const QuestionSet = sequelize.define(
+  'QuestionSet',
   {
-    courseId: {
+    questionId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Course',  
+        model: 'Question',  
         key: 'id',
       },
       allowNull: false,
@@ -15,7 +15,7 @@ const CourseCategory = sequelize.define(
     categoryId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Category',
+        model: 'QuestionCategory',
         key: 'id',
       },
       allowNull: false,
@@ -28,4 +28,4 @@ const CourseCategory = sequelize.define(
 );
 
 
-export default CourseCategory;
+export default QuestionSet;

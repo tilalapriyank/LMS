@@ -1,19 +1,19 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/Database.js";
 
-const UserMeta = sequelize.define(
-  "UserMeta",
+const QuizMeta = sequelize.define(
+  "QuizMeta",
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    userId: {
+    QuizId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'User',
+        model: 'Quiz',
         key: "id",
       },
       onDelete: "CASCADE",
@@ -34,4 +34,4 @@ const UserMeta = sequelize.define(
 );
 
 
-export default UserMeta;
+export default QuizMeta;

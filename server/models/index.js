@@ -4,6 +4,8 @@ import Course from "./Course.js";
 import Lesson from "./Lesson.js";
 import Quiz from "./Quiz.js";
 import Question from "./Question.js";
+import QuestionCategory from "./QuestionCategory.js";
+import QuestionSet from "./QuestionSet.js";
 import Category from "./Category.js";
 import Tag from "./Tag.js";
 import Section from "./Section.js";
@@ -41,6 +43,15 @@ const setupAssociations = () => {
     foreignKey: "categoryId",
   });
 
+  Question.belongsToMany(QuestionCategory, {
+    through: QuestionSet,
+    foreignKey: "questionId",
+  });
+  QuestionCategory.belongsToMany(Question, {
+    through: QuestionSet,
+    foreignKey: "categoryId",
+  });
+
   Course.belongsToMany(Tag, { through: CourseTag, foreignKey: "courseId" });
   Tag.belongsToMany(Course, { through: CourseTag, foreignKey: "tagId" });
 };
@@ -53,6 +64,8 @@ export {
   Lesson,
   Quiz,
   Question,
+  QuestionCategory,
+  QuestionSet,
   Category,
   Tag,
   Section,
