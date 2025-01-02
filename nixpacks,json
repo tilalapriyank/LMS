@@ -1,0 +1,15 @@
+{
+  "phases": {
+    "frontend": {
+      "directory": "client",
+      "build": "npm install && npm run build"
+    },
+    "backend": {
+      "directory": "server",
+      "build": "npm install"
+    }
+  },
+  "start": {
+    "cmd": "node server/index.js"
+  }
+}
