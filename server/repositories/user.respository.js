@@ -3,12 +3,12 @@ import User from "../models/User.js";
 class UserRepository {
   // Find a user by ID
   async findById(id) {
-    return User.findById(id);
+    return User.findByPk(id);
   }
 
   // Find all users
   async findAll() {
-    return User.find();
+    return User.findAll();
   }
 
   // Create a new user
