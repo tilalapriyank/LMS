@@ -25,6 +25,24 @@ server
     |    |-Tag
     |    |-User
     |    |-Usermeta
+    |-repositories
+    |    |-Category
+    |    |-Comment
+    |    |-Course
+    |    |-CourseCategory
+    |    |-CourseTag
+    |    |-index
+    |    |-Lesson
+    |    |-Question
+    |    |-QuestionCategory
+    |    |-QuestionSet
+    |    |-Quiz
+    |    |-QuizQuestion
+    |    |-Section
+    |    |-Sectionitem
+    |    |-Tag
+    |    |-User
+    |    |-Usermeta
     |-routes
     |    |-authRoutes
     |-.env
