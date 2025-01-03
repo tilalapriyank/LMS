@@ -1,9 +1,14 @@
 import User from "./User.js";
 import UserMeta from "./UserMeta.js";
 import Course from "./Course.js";
+import CourseMeta from "./CourseMeta.js";
 import Lesson from "./Lesson.js";
+import LessonMeta from "./LessonMeta.js";
 import Quiz from "./Quiz.js";
+import QuizMeta from "./QuizMeta.js";
 import Question from "./Question.js";
+import QuestionMeta from "./QuestionMeta.js";
+import QuestionAnswer from "./QuestionAnswer.js";
 import QuestionCategory from "./QuestionCategory.js";
 import QuestionSet from "./QuestionSet.js";
 import Category from "./Category.js";
@@ -19,11 +24,38 @@ const setupAssociations = () => {
   UserMeta.belongsTo(User, { foreignKey: "userId" });
   User.hasMany(UserMeta, { foreignKey: "userId" });
 
+  Course.belongsTo(User, { foreignKey: "author" });
+  User.hasMany(Course, { foreignKey: "author" });
+
+  Lesson.belongsTo(User, { foreignKey: "author" });
+  User.hasMany(Lesson, { foreignKey: "author" });
+
+  Quiz.belongsTo(User, { foreignKey: "author" });
+  User.hasMany(Quiz, { foreignKey: "author" });
+
+  Question.belongsTo(User, { foreignKey: "author" });
+  User.hasMany(Question, { foreignKey: "author" });
+
+  CourseMeta.belongsTo(Course, { foreignKey: "courseId" });
+  Course.hasMany(CourseMeta, { foreignKey: "courseId" });
+
+  LessonMeta.belongsTo(Lesson, { foreignKey: "lessonId" });
+  Lesson.hasMany(LessonMeta, { foreignKey: "lessonId" });
+
+  QuizMeta.belongsTo(Quiz, { foreignKey: "quizId" });
+  Quiz.hasMany(QuizMeta, { foreignKey: "quizId" });
+
+  QuestionMeta.belongsTo(Question, { foreignKey: "questionId" });
+  Question.hasMany(QuestionMeta, { foreignKey: "questionId" });
+
   QuizQuestion.belongsTo(Quiz, { foreignKey: "quizId" });
   Quiz.hasMany(QuizQuestion, { foreignKey: "quizId" });
 
   QuizQuestion.belongsTo(Question, { foreignKey: "questionId" });
   Question.hasMany(QuizQuestion, { foreignKey: "questionId" });
+
+  QuestionAnswer.belongsTo(Question, { foreignKey: "questionId" });
+  Question.hasMany(QuestionAnswer, { foreignKey: "questionId" });
 
   Section.belongsTo(Course, { foreignKey: "courseId" });
   Course.hasMany(Section, { foreignKey: "courseId" });
@@ -61,9 +93,14 @@ export {
   User,
   UserMeta,
   Course,
+  CourseMeta,
   Lesson,
+  LessonMeta,
   Quiz,
+  QuizMeta,
   Question,
+  QuestionMeta,
+  QuestionAnswer,
   QuestionCategory,
   QuestionSet,
   Category,

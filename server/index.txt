@@ -29,3 +29,4 @@ server
     |    |-authRoutes
     |-.env
     |-index.js
+    |-seed.js

@@ -9,7 +9,7 @@ const QuestionMeta = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    QuestionId: {
+    questionId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

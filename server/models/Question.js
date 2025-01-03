@@ -13,13 +13,15 @@ const Question = sequelize.define(
       type: DataTypes.STRING(255),
       allowNull: false,
     },
-    date: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
     author: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.INTEGER,
       allowNull: true,
+      allowNull: false,
+      references: {
+        model: "User",
+        key: "id",
+      },
+      onDelete: "CASCADE",
     },
     type: {
       type: DataTypes.STRING(50),

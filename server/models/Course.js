@@ -22,12 +22,14 @@ const Course = sequelize.define(
       allowNull: false,
     },
     author: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.INTEGER,
       allowNull: true,
-    },
-    date: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
+      allowNull: false,
+      references: {
+        model: "User",
+        key: "id",
+      },
+      onDelete: "CASCADE",
     },
   },
   {

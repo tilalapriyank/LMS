@@ -9,7 +9,7 @@ const CourseMeta = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    CourseId: {
+    courseId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

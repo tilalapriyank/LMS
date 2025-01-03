@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/Database.js";
-import Section from "./Section.js";
 
 const SectionItem = sequelize.define(
   "SectionItem",
@@ -13,7 +12,7 @@ const SectionItem = sequelize.define(
     sectionId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Section',
+        model: "Section",
         key: "id",
       },
       allowNull: false,
@@ -32,10 +31,9 @@ const SectionItem = sequelize.define(
     },
   },
   {
-    timestamps: true,
+    timestamps: false,
     freezeTableName: true,
   }
 );
-
 
 export default SectionItem;
