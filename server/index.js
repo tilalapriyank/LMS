@@ -6,6 +6,7 @@ import { initializeDatabase } from "./config/dbcontexts.js";
 import authRoutes from "./routes/authRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import lessonRoutes from "./routes/lessonRoutes.js";
 import helmet from "helmet";
 import morgan from "morgan";
 
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/lessons", lessonRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

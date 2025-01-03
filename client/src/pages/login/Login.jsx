@@ -3,6 +3,7 @@ import { Box, TextField, Button, Typography, Container } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
+import { API_URL } from "../../api/config";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,7 +14,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/api/login", {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,7 +30,7 @@ const Login = () => {
       const data = await response.json();
       login(data.role, data.token);
       console.log("Login successful");
-      navigate('/dashboard');
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error.message);
     }
@@ -72,7 +73,7 @@ const Login = () => {
         <Button
           variant="contained"
           color="primary"
-          fullWidth 
+          fullWidth
           onClick={handleLogin}
           sx={{ mt: 2 }}
         >
