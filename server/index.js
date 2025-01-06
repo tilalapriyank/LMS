@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import lessonRoutes from "./routes/lessonRoutes.js";
+import quizRoutes from "./routes/quizRoutes.js";
 import helmet from "helmet";
 import morgan from "morgan";
 
@@ -28,6 +29,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/lessons", lessonRoutes);
+app.use("/api/quiz", quizRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

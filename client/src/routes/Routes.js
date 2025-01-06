@@ -1,9 +1,5 @@
 import React, { useContext } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import InstructorPage from "../pages/InstructorPage";
 import StudentPage from "../pages/StudentPage";
@@ -13,8 +9,8 @@ import Footer from "../components/footer/Footer";
 import RegistrationPage from "../pages/registration/RegistrationPage";
 import Home from "../pages/home/Home";
 import AdminDashboard from "../pages/admin/dashboard/AdminDashboard";
+import CoursesList from "../pages/Course";
 import { Box } from "@mui/material";
-
 
 const RoutesComponent = () => {
   const { role, isAuthenticated } = useContext(UserContext); // Get user role and authentication status
@@ -44,16 +40,16 @@ const RoutesComponent = () => {
           <Route
             path="/dashboard"
             element={
-              isAuthenticated ?  (
-                  <AdminDashboard />
-                ) : role === "instructor" ? (
-                  <InstructorPage />
-                ) : (
-                  <StudentPage />
-                )
-              
+              isAuthenticated ? (
+                <AdminDashboard />
+              ) : role === "instructor" ? (
+                <InstructorPage />
+              ) : (
+                <StudentPage />
+              )
             }
           />
+          <Route path="/course" element={<CoursesList />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </Box>

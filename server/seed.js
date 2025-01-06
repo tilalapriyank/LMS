@@ -9,6 +9,9 @@ import {
   SectionItem,
   User,
   UserMeta,
+  Category,
+  Tag,
+  QuestionCategory
 } from "./models/index.js";
 
 export const defaultData = async () => {
@@ -2688,6 +2691,127 @@ export const defaultData = async () => {
         order: 4,
       },
     ]);
+
+    const categories = await Category.bulkCreate([
+      {
+        name: "Programming",
+        description: "Courses related to programming languages.",
+      },
+      {
+        name: "Web Development",
+        description:
+          "Courses focused on building websites and web applications.",
+      },
+      {
+        name: "Design",
+        description: "Courses related to design principles and UI/UX.",
+      },
+      {
+        name: "Frontend Development",
+        description:
+          "Courses focused on client-side development using HTML, CSS, and JavaScript.",
+      },
+      {
+        name: "Backend Development",
+        description:
+          "Courses focused on server-side development, APIs, and database management.",
+      },
+      {
+        name: "Full-Stack Development",
+        description:
+          "Courses that teach both frontend and backend development skills.",
+      },
+      {
+        name: "Node.js",
+        description:
+          "Courses focused on backend development using Node.js and JavaScript.",
+      },
+      {
+        name: "Data Structures",
+        description:
+          "Courses related to the study of data organization, management, and storage.",
+      },
+      {
+        name: "Machine Learning",
+        description:
+          "Courses focused on algorithms and techniques in machine learning and artificial intelligence.",
+      },
+      {
+        name: "AI & Deep Learning",
+        description:
+          "Courses related to advanced artificial intelligence and deep learning techniques.",
+      },
+      {
+        name: "Computer Science",
+        description:
+          "Courses covering core concepts and principles of computer science.",
+      },
+    ]);
+
+    const tags = await Tag.bulkCreate([
+      {
+        name: "JavaScript",
+        description: "Related to JavaScript programming language.",
+      },
+      {
+        name: "CSS",
+        description: "Related to Cascading Style Sheets for styling webpages.",
+      },
+      {
+        name: "Full-Stack",
+        description: "Refers to both frontend and backend development skills.",
+      },
+      {
+        name: "Node.js",
+        description: "Related to Node.js framework for backend development.",
+      },
+      {
+        name: "Frontend Development",
+        description: "Techniques and tools for client-side web development.",
+      },
+      {
+        name: "Backend Development",
+        description:
+          "Techniques and tools for server-side programming and database management.",
+      },
+      {
+        name: "Web Design",
+        description:
+          "Design principles and techniques for web pages and applications.",
+      },
+      {
+        name: "Algorithms",
+        description:
+          "Mathematical steps and processes to solve programming problems.",
+      },
+      {
+        name: "Machine Learning",
+        description:
+          "Algorithms and techniques to enable computers to learn from data.",
+      },
+      {
+        name: "Python",
+        description:
+          "Programming language often used for backend, data science, and machine learning.",
+      },
+      {
+        name: "AI",
+        description:
+          "Related to Artificial Intelligence techniques and applications.",
+      },
+      {
+        name: "Data Structures",
+        description: "Concepts around the storage and manipulation of data.",
+      },
+    ]);
+
+    const questioncategories = await QuestionCategory.bulkCreate([
+      {
+        name: "JavaScript",
+        description: "",
+      },
+    ]);
+
   } catch (error) {
     console.error("Error inserting default data:", error.message);
     throw error;
