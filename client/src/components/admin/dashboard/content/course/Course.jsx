@@ -41,7 +41,7 @@ const Course = () => {
 
         // Fetch categories for each course
         const categoryPromises = courseResponse.map(
-          (course) => courseCategoryByCid(course.id) // Pass course ID to the API
+          (course) => courseCategoryByCid(course.id) 
         );
 
         const categoryResponses = await Promise.all(categoryPromises);

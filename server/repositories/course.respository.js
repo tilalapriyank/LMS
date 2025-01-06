@@ -61,6 +61,14 @@ class CourseRepository {
   async findByStatus(status) {
     return Course.findAll({ where: { status } });
   }
+
+  async getNameById(id) {
+    const course = await this.findById(id);
+    if (course) {
+      return course.name; 
+    }
+    return null;
+  }
 }
 
 export default new CourseRepository();

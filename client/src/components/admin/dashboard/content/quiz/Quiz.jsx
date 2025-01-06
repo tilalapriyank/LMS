@@ -17,12 +17,12 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { lessonList } from "../../../../../api/lesson";
+import { quizList } from "../../../../../api/quiz";
 import { useNavigate } from "react-router-dom";
 import { itemCourseByid } from "../../../../../api/itemcourse";
 
-const Lesson = () => {
-  const [lessons, setLessons] = useState([]);
+const Quiz = () => {
+  const [quizzes, setQuizzes] = useState([]);  // State for quizzes
   const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [order, setOrder] = useState("asc");
@@ -35,21 +35,21 @@ const Lesson = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const lessonResponse = await lessonList();
-        setLessons(lessonResponse);
+        const quizResponse = await quizList();  // Fetch quizzes instead of lessons
+        setQuizzes(quizResponse);
 
-        const coursePromises = lessonResponse.map((course) =>
-          itemCourseByid(course.id)
+        const coursePromises = quizResponse.map((quiz) =>
+          itemCourseByid(quiz.id)
         );
-        const lessonResponses = await Promise.all(coursePromises);
+        const quizResponses = await Promise.all(coursePromises);
 
-        const courseData = lessonResponses.map((response, index) => ({
-          itemId: lessonResponse[index].id,
+        const courseData = quizResponses.map((response, index) => ({
+          itemId: quizResponse[index].id,
           course: response,
         }));
         setCourses(courseData);
       } catch (error) {
-        console.error("Error fetching lessons:", error);
+        console.error("Error fetching quizzes:", error);
       }
     };
     fetchData();
@@ -83,25 +83,25 @@ const Lesson = () => {
     return course ? course.course : "-";
   };
 
-  const filteredLessons = lessons
-    .filter((lesson) =>
+  const filteredQuizzes = quizzes
+    .filter((quiz) =>
       activeTab === "all"
         ? true
         : activeTab === "published"
-        ? lesson.status === "published"
-        : lesson.status === "draft"
+        ? quiz.status === "published"
+        : quiz.status === "draft"
     )
-    .filter((lesson) =>
-      lesson.name.toLowerCase().includes(searchTerm.toLowerCase())
+    .filter((quiz) =>
+      quiz.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-  const sortedLessons = filteredLessons.sort((a, b) => {
+  const sortedQuizzes = filteredQuizzes.sort((a, b) => {
     if (a[orderBy] < b[orderBy]) return order === "asc" ? -1 : 1;
     if (a[orderBy] > b[orderBy]) return order === "asc" ? 1 : -1;
     return 0;
   });
 
-  const paginatedLessons = sortedLessons.slice(
+  const paginatedQuizzes = sortedQuizzes.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -109,14 +109,14 @@ const Lesson = () => {
   return (
     <Box>
       <Toolbar sx={{ justifyContent: "space-between", marginBottom: 2 }}>
-        <Typography variant="h4">Lessons</Typography>
+        <Typography variant="h4">Quizzes</Typography>
         <Button
           variant="contained"
           color="primary"
           sx={{ padding: "10px 20px" }}
           onClick={() => navigate(`add/`)}
         >
-          Add New Lesson
+          Add New Quiz
         </Button>
       </Toolbar>
 
@@ -133,7 +133,7 @@ const Lesson = () => {
       <Box sx={{ display: "flex", justifyContent: "right", marginBottom: 2 }}>
         <TextField
           variant="outlined"
-          placeholder="Search lessons..."
+          placeholder="Search quizzes..."
           value={searchTerm}
           onChange={handleSearch}
           fullWidth
@@ -156,7 +156,7 @@ const Lesson = () => {
                   direction={orderBy === "name" ? order : "asc"}
                   onClick={() => handleSort("name")}
                 >
-                  Lesson Name
+                  Quiz Name
                 </TableSortLabel>
               </TableCell>
               <TableCell>
@@ -182,14 +182,14 @@ const Lesson = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedLessons.map((lesson, index) => (
+            {paginatedQuizzes.map((quiz, index) => (
               <TableRow key={index}>
-                <TableCell>{lesson.name}</TableCell>
-                <TableCell>{lesson.author}</TableCell>
-                <TableCell>{getCourseName(lesson.id)}</TableCell>
+                <TableCell>{quiz.name}</TableCell>
+                <TableCell>{quiz.author}</TableCell>
+                <TableCell>{getCourseName(quiz.id)}</TableCell>
                 <TableCell>
-                  {lesson.createdAt
-                    ? new Date(lesson.createdAt).toLocaleDateString("en-us", {
+                  {quiz.createdAt
+                    ? new Date(quiz.createdAt).toLocaleDateString("en-us", {
                         hour: "2-digit",
                         minute: "2-digit",
                         second: "2-digit",
@@ -201,7 +201,7 @@ const Lesson = () => {
                     variant="outlined"
                     color="primary"
                     sx={{ marginRight: 1 }}
-                    onClick={() => navigate(`edit/${lesson.id}`)}
+                    onClick={() => navigate(`edit/${quiz.id}`)}
                   >
                     Edit
                   </Button>
@@ -217,7 +217,7 @@ const Lesson = () => {
 
       <TablePagination
         component="div"
-        count={filteredLessons.length}
+        count={filteredQuizzes.length}
         page={page}
         onPageChange={handlePageChange}
         rowsPerPage={rowsPerPage}
@@ -228,4 +228,4 @@ const Lesson = () => {
   );
 };
 
-export default Lesson;
+export default Quiz;

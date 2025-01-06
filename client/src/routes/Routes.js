@@ -12,8 +12,10 @@ import AdminDashboard from "../pages/admin/dashboard/AdminDashboard";
 import CoursesList from "../pages/Course";
 import DashboardContent from "../components/admin/dashboard/content/main";
 import CourseList from "../components/admin/dashboard/content/course/Course";
+import LessonList from "../components/admin/dashboard/content/lesson/Lesson";
 import Setting from "../components/admin/dashboard/content/setting/Setting";
 import { Box, Typography } from "@mui/material";
+import Quiz from "../components/admin/dashboard/content/quiz/Quiz";
 
 const RoutesComponent = () => {
   const { role, isAuthenticated } = useContext(UserContext); // Get user role and authentication status
@@ -57,14 +59,8 @@ const RoutesComponent = () => {
             {/* Nested routes for dashboard */}
             <Route path="" element={<DashboardContent />} />
             <Route path="course" element={<CourseList />} />
-            <Route
-              path="lesson"
-              element={<Typography>Create and edit Lessons.</Typography>}
-            />
-            <Route
-              path="quiz"
-              element={<Typography>Build engaging Quizzes.</Typography>}
-            />
+            <Route path="lesson" element={<LessonList />} />
+            <Route path="quiz" element={<Quiz />} />
             <Route
               path="question"
               element={
