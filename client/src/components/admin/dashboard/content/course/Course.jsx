@@ -15,31 +15,49 @@ import {
   Tabs,
   Tab,
   Paper,
-  Typography
+  Typography,
 } from "@mui/material";
-import {courseList} from "../../../../../api/courseList";
+import { courseList } from "../../../../../api/course";
+import { courseCategoryByCid } from "../../../../../api/coursecategory";
+import { useNavigate } from "react-router-dom";
 
 const Course = () => {
   const [courses, setCourses] = useState([]);
+  const [categories, setCategories] = useState([]); // State for storing category names
   const [searchTerm, setSearchTerm] = useState("");
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [activeTab, setActiveTab] = useState("all");
+  const navigate = useNavigate();
 
-  // Fetch data from API
+  // Fetch courses and categories from API
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchData = async () => {
       try {
-        const response = await courseList(); 
-        setCourses(response); 
+        const courseResponse = await courseList();
+        setCourses(courseResponse);
+
+        // Fetch categories for each course
+        const categoryPromises = courseResponse.map(
+          (course) => courseCategoryByCid(course.id) // Pass course ID to the API
+        );
+
+        const categoryResponses = await Promise.all(categoryPromises);
+        // Store category data in state
+        const categoryData = categoryResponses.map((response, index) => ({
+          courseId: courseResponse[index].id,
+          category: response, // Assuming response contains category data
+        }));
+
+        setCategories(categoryData);
       } catch (error) {
-        console.error("Error fetching courses:", error);
+        console.error("Error fetching courses or categories:", error);
       }
     };
-    fetchCourses();
-  }, []); // Empty dependency array to run only once on mount
+    fetchData();
+  }, []);
 
   const handleSort = (property) => {
     const isAscending = orderBy === property && order === "asc";
@@ -64,13 +82,18 @@ const Course = () => {
     setActiveTab(newValue);
   };
 
+  const getCategoryName = (courseId) => {
+    const category = categories.find((cat) => cat.courseId === courseId);
+    return category ? category.category.join(", ") : "-";
+  };
+
   const filteredCourses = courses
     .filter((course) =>
       activeTab === "all"
         ? true
         : activeTab === "published"
         ? course.status === "published"
-        : course.status === "mine"
+        : course.status === "draft"
     )
     .filter((course) =>
       course.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -86,20 +109,28 @@ const Course = () => {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
-
   return (
     <Box>
       <Toolbar sx={{ justifyContent: "space-between", marginBottom: 2 }}>
         <Typography variant="h4">Courses</Typography>
-        <Button variant="contained" color="primary" sx={{ padding: "10px 20px" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ padding: "10px 20px" }}
+          onClick={() => navigate(`add/`)}
+        >
           Add New Course
         </Button>
       </Toolbar>
 
-      <Tabs value={activeTab} onChange={handleTabChange} sx={{ marginBottom: 2 }}>
+      <Tabs
+        value={activeTab}
+        onChange={handleTabChange}
+        sx={{ marginBottom: 2 }}
+      >
         <Tab label="All" value="all" />
         <Tab label="Published" value="published" />
-        <Tab label="Mine" value="mine" />
+        <Tab label="Draft" value="draft" />
       </Tabs>
 
       <Box sx={{ display: "flex", justifyContent: "right", marginBottom: 2 }}>
@@ -166,12 +197,25 @@ const Course = () => {
             {paginatedCourses.map((course, index) => (
               <TableRow key={index}>
                 <TableCell>{course.name}</TableCell>
-                <TableCell>{course.category}</TableCell>
+                <TableCell>{getCategoryName(course.id)}</TableCell>
                 <TableCell>{course.author}</TableCell>
                 <TableCell>{course.name}</TableCell>
-                <TableCell>{course.date}</TableCell>
                 <TableCell>
-                  <Button variant="outlined" color="primary" sx={{ marginRight: 1 }}>
+                  {course.createdAt
+                    ? new Date(course.createdAt).toLocaleDateString("en-us", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                      })
+                    : "No Date Available"}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    sx={{ marginRight: 1 }}
+                    onClick={() => navigate(`edit/${course.id}`)}
+                  >
                     Edit
                   </Button>
                   <Button variant="outlined" color="secondary">
@@ -191,6 +235,7 @@ const Course = () => {
         onPageChange={handlePageChange}
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={handleRowsPerPageChange}
+        rowsPerPageOptions={[5, 10, 25, 50, 100]}
       />
     </Box>
   );

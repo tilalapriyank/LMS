@@ -1,9 +1,20 @@
+import { Op } from 'sequelize';
 import Category from "../models/Category.js";
 
 class CategoryRepository {
   // Find a category by ID
   async findById(id) {
     return Category.findByPk(id); // Using `findByPk` to find by the primary key
+  }
+
+  async findByIds(ids) {
+    return Category.findAll({
+      where: {
+        id: {
+          [Op.in]: ids,
+        },
+      },
+    });
   }
 
   // Find all categories

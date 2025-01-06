@@ -13,6 +13,9 @@ import sectionRoutes from "./routes/sectionRoutes.js";
 import quizQuestionRoutes from "./routes/quizQuestionRoutes.js";
 import quizMetaRoutes from "./routes/quizMetaRoutes.js";
 import courseMetaRoutes from "./routes/courseMetaRoutes.js";
+import courseCategoryRoutes from "./routes/courseCategoryRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
+import lmsRoutes from "./routes/lmsRoutes.js";
 import helmet from "helmet";
 import morgan from "morgan";
 
@@ -40,6 +43,9 @@ app.use("/api/sections", sectionRoutes);
 app.use("/api/quizquestions", quizQuestionRoutes);
 app.use("/api/quiz-metas", quizMetaRoutes);
 app.use("/api/course-metas", courseMetaRoutes);
+app.use("/api/course-category", courseCategoryRoutes);
+app.use("/api/category", categoryRoutes);
+app.use("/api/lms", lmsRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
