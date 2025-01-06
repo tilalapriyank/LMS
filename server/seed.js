@@ -11,7 +11,7 @@ import {
   UserMeta,
   Category,
   Tag,
-  QuestionCategory
+  QuestionCategory,
 } from "./models/index.js";
 
 export const defaultData = async () => {
@@ -2807,11 +2807,14 @@ export const defaultData = async () => {
 
     const questioncategories = await QuestionCategory.bulkCreate([
       {
-        name: "JavaScript",
+        name: "JavaScript 1",
+        description: "",
+      },
+      {
+        name: "JavaScript 2",
         description: "",
       },
     ]);
-
   } catch (error) {
     console.error("Error inserting default data:", error.message);
     throw error;
