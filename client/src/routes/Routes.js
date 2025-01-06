@@ -16,6 +16,7 @@ import LessonList from "../components/admin/dashboard/content/lesson/Lesson";
 import Setting from "../components/admin/dashboard/content/setting/Setting";
 import { Box, Typography } from "@mui/material";
 import Quiz from "../components/admin/dashboard/content/quiz/Quiz";
+import Question from "../components/admin/dashboard/content/question/Question";
 
 const RoutesComponent = () => {
   const { role, isAuthenticated } = useContext(UserContext); // Get user role and authentication status
@@ -61,12 +62,7 @@ const RoutesComponent = () => {
             <Route path="course" element={<CourseList />} />
             <Route path="lesson" element={<LessonList />} />
             <Route path="quiz" element={<Quiz />} />
-            <Route
-              path="question"
-              element={
-                <Typography>Manage Questions for your Quizzes.</Typography>
-              }
-            />
+            <Route path="question" element={<Question />} />
             <Route
               path="category"
               element={

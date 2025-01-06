@@ -33,7 +33,7 @@ const QuizQuestion = sequelize.define(
     },
   },
   {
-    timestamps: true,
+    timestamps: false,
     freezeTableName: true,
   }
 );

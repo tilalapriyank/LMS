@@ -10,5 +10,6 @@ router.get("/question/:questionId", QuizQuestionController.getQuizQuestionsByQue
 router.get("/:id", QuizQuestionController.getQuizQuestionById); 
 router.put("/:id/order", QuizQuestionController.updateQuizQuestionOrder); 
 router.delete("/:id", QuizQuestionController.deleteQuizQuestion);
+router.get("/count/:quizId",QuizQuestionController.countQuizQuestionsByQuizId);
 
 export default router;

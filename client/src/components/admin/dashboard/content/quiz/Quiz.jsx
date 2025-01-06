@@ -17,13 +17,14 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { quizList } from "../../../../../api/quiz";
+import { quizList, questionCount } from "../../../../../api/quiz";
 import { useNavigate } from "react-router-dom";
 import { itemCourseByid } from "../../../../../api/itemcourse";
 
 const Quiz = () => {
-  const [quizzes, setQuizzes] = useState([]);  // State for quizzes
+  const [quizzes, setQuizzes] = useState([]); // State for quizzes
   const [courses, setCourses] = useState([]);
+  const [questions, setQuestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
@@ -35,7 +36,7 @@ const Quiz = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const quizResponse = await quizList();  // Fetch quizzes instead of lessons
+        const quizResponse = await quizList(); // Fetch quizzes instead of lessons
         setQuizzes(quizResponse);
 
         const coursePromises = quizResponse.map((quiz) =>
@@ -47,7 +48,17 @@ const Quiz = () => {
           itemId: quizResponse[index].id,
           course: response,
         }));
+
+        const Questions = quizResponse.map((quiz) => questionCount(quiz.id));
+        const question = await Promise.all(Questions);
+
+        const questionData = question.map((response, index) => ({
+          itemId: quizResponse[index].id,
+          count: response,
+        }));
+
         setCourses(courseData);
+        setQuestions(questionData);
       } catch (error) {
         console.error("Error fetching quizzes:", error);
       }
@@ -81,6 +92,11 @@ const Quiz = () => {
   const getCourseName = (itemId) => {
     const course = courses.find((cat) => cat.itemId === itemId);
     return course ? course.course : "-";
+  };
+  const getQuestionCount = (itemId) => {
+    const count = questions.find((cat) => cat.itemId === itemId);
+    console.log(count);
+    return count ? count.count.count : "-";
   };
 
   const filteredQuizzes = quizzes
@@ -169,6 +185,7 @@ const Quiz = () => {
                 </TableSortLabel>
               </TableCell>
               <TableCell>Course</TableCell>
+              <TableCell>Questions</TableCell>
               <TableCell>
                 <TableSortLabel
                   active={orderBy === "date"}
@@ -187,6 +204,7 @@ const Quiz = () => {
                 <TableCell>{quiz.name}</TableCell>
                 <TableCell>{quiz.author}</TableCell>
                 <TableCell>{getCourseName(quiz.id)}</TableCell>
+                <TableCell>{getQuestionCount(quiz.id)}</TableCell>
                 <TableCell>
                   {quiz.createdAt
                     ? new Date(quiz.createdAt).toLocaleDateString("en-us", {

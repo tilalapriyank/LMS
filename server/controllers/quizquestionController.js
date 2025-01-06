@@ -6,9 +6,13 @@ class QuizQuestionController {
     try {
       const quizQuestionData = req.body;
       if (!quizQuestionData.quizId || !quizQuestionData.questionId) {
-        return res.status(400).json({ message: "Quiz ID and Question ID are required" });
+        return res
+          .status(400)
+          .json({ message: "Quiz ID and Question ID are required" });
       }
-      const quizQuestion = await QuizQuestionRepository.createQuizQuestion(quizQuestionData);
+      const quizQuestion = await QuizQuestionRepository.createQuizQuestion(
+        quizQuestionData
+      );
       return res.status(201).json(quizQuestion);
     } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -19,7 +23,8 @@ class QuizQuestionController {
   async getQuizQuestionsByQuizId(req, res) {
     try {
       const { quizId } = req.params;
-      const quizQuestions = await QuizQuestionRepository.getQuizQuestionsByQuizId(quizId);
+      const quizQuestions =
+        await QuizQuestionRepository.getQuizQuestionsByQuizId(quizId);
       return res.status(200).json(quizQuestions);
     } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -30,7 +35,8 @@ class QuizQuestionController {
   async getQuizQuestionsByQuestionId(req, res) {
     try {
       const { questionId } = req.params;
-      const quizQuestions = await QuizQuestionRepository.getQuizQuestionsByQuestionId(questionId);
+      const quizQuestions =
+        await QuizQuestionRepository.getQuizQuestionsByQuestionId(questionId);
       return res.status(200).json(quizQuestions);
     } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -56,7 +62,8 @@ class QuizQuestionController {
     try {
       const { id } = req.params;
       const { order } = req.body;
-      const updatedQuizQuestion = await QuizQuestionRepository.updateQuizQuestionOrder(id, order);
+      const updatedQuizQuestion =
+        await QuizQuestionRepository.updateQuizQuestionOrder(id, order);
       if (updatedQuizQuestion) {
         return res.status(200).json(updatedQuizQuestion);
       }
@@ -77,6 +84,21 @@ class QuizQuestionController {
       return res.status(404).json({ message: "Quiz Question not found" });
     } catch (error) {
       return res.status(500).json({ message: error.message });
+    }
+  }
+
+  async countQuizQuestionsByQuizId(req, res) {
+    const { quizId } = req.params;
+
+    try {
+      const count = await QuizQuestionRepository.countQuizQuestionsByQuizId(
+        quizId
+      );
+
+      res.status(200).json({ count });
+    } catch (error) {
+      console.error("Error counting quiz questions:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
   }
 }

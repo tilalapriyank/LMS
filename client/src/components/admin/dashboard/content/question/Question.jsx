@@ -17,12 +17,13 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { courseList, courseCategoryByCid } from "../../../../../api/course";
+import { questionList } from "../../../../../api/question";
 import { useNavigate } from "react-router-dom";
+import { itemCourseByid } from "../../../../../api/itemcourse";
 
-const Course = () => {
+const Question = () => {
+  const [questions, setQuestions] = useState([]);
   const [courses, setCourses] = useState([]);
-  const [categories, setCategories] = useState([]); // State for storing category names
   const [searchTerm, setSearchTerm] = useState("");
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
@@ -31,28 +32,25 @@ const Course = () => {
   const [activeTab, setActiveTab] = useState("all");
   const navigate = useNavigate();
 
-  // Fetch courses and categories from API
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const courseResponse = await courseList();
-        setCourses(courseResponse);
+        const questionResponse = await questionList();
+        setQuestions(questionResponse);
 
-        // Fetch categories for each course
-        const categoryPromises = courseResponse.map((course) =>
-          courseCategoryByCid(course.id)
+        const coursePromises = questionResponse.map((question) =>
+          itemCourseByid(question.id)
         );
+        const courseResponses = await Promise.all(coursePromises);
 
-        const categoryResponses = await Promise.all(categoryPromises);
-        // Store category data in state
-        const categoryData = categoryResponses.map((response, index) => ({
-          courseId: courseResponse[index].id,
-          category: response, // Assuming response contains category data
+        const courseData = courseResponses.map((response, index) => ({
+          itemId: questionResponse[index].id,
+          course: response,
         }));
 
-        setCategories(categoryData);
+        setCourses(courseData);
       } catch (error) {
-        console.error("Error fetching courses or categories:", error);
+        console.error("Error fetching questions:", error);
       }
     };
     fetchData();
@@ -81,44 +79,45 @@ const Course = () => {
     setActiveTab(newValue);
   };
 
-  const getCategoryName = (courseId) => {
-    const category = categories.find((cat) => cat.courseId === courseId);
-    return category ? category.category.join(", ") : "-";
+  const getCourseName = (itemId) => {
+    const course = courses.find((cat) => cat.itemId === itemId);
+    return course ? course.course : "-";
   };
 
-  const filteredCourses = courses
-    .filter((course) =>
+  const filteredQuestions = questions
+    .filter((question) =>
       activeTab === "all"
         ? true
         : activeTab === "published"
-        ? course.status === "published"
-        : course.status === "draft"
+        ? question.status === "published"
+        : question.status === "draft"
     )
-    .filter((course) =>
-      course.name.toLowerCase().includes(searchTerm.toLowerCase())
+    .filter((question) =>
+      question.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-  const sortedCourses = filteredCourses.sort((a, b) => {
+  const sortedQuestions = filteredQuestions.sort((a, b) => {
     if (a[orderBy] < b[orderBy]) return order === "asc" ? -1 : 1;
     if (a[orderBy] > b[orderBy]) return order === "asc" ? 1 : -1;
     return 0;
   });
 
-  const paginatedCourses = sortedCourses.slice(
+  const paginatedQuestions = sortedQuestions.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
+
   return (
     <Box>
       <Toolbar sx={{ justifyContent: "space-between", marginBottom: 2 }}>
-        <Typography variant="h4">Courses</Typography>
+        <Typography variant="h4">Questions</Typography>
         <Button
           variant="contained"
           color="primary"
           sx={{ padding: "10px 20px" }}
           onClick={() => navigate(`add/`)}
         >
-          Add New Course
+          Add New Question
         </Button>
       </Toolbar>
 
@@ -135,7 +134,7 @@ const Course = () => {
       <Box sx={{ display: "flex", justifyContent: "right", marginBottom: 2 }}>
         <TextField
           variant="outlined"
-          placeholder="Search courses..."
+          placeholder="Search questions..."
           value={searchTerm}
           onChange={handleSearch}
           fullWidth
@@ -158,16 +157,7 @@ const Course = () => {
                   direction={orderBy === "name" ? order : "asc"}
                   onClick={() => handleSort("name")}
                 >
-                  Course Name
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "category"}
-                  direction={orderBy === "category" ? order : "asc"}
-                  onClick={() => handleSort("category")}
-                >
-                  Category
+                  Question Name
                 </TableSortLabel>
               </TableCell>
               <TableCell>
@@ -179,7 +169,7 @@ const Course = () => {
                   Author
                 </TableSortLabel>
               </TableCell>
-              <TableCell>Content</TableCell>
+              <TableCell>Course</TableCell>
               <TableCell>
                 <TableSortLabel
                   active={orderBy === "date"}
@@ -193,15 +183,14 @@ const Course = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedCourses.map((course, index) => (
+            {paginatedQuestions.map((question, index) => (
               <TableRow key={index}>
-                <TableCell>{course.name}</TableCell>
-                <TableCell>{getCategoryName(course.id)}</TableCell>
-                <TableCell>{course.author}</TableCell>
-                <TableCell>{course.name}</TableCell>
+                <TableCell>{question.name}</TableCell>
+                <TableCell>{question.author}</TableCell>
+                <TableCell>{getCourseName(question.id)}</TableCell>
                 <TableCell>
-                  {course.createdAt
-                    ? new Date(course.createdAt).toLocaleDateString("en-us", {
+                  {question.createdAt
+                    ? new Date(question.createdAt).toLocaleDateString("en-us", {
                         hour: "2-digit",
                         minute: "2-digit",
                         second: "2-digit",
@@ -213,7 +202,7 @@ const Course = () => {
                     variant="outlined"
                     color="primary"
                     sx={{ marginRight: 1 }}
-                    onClick={() => navigate(`edit/${course.id}`)}
+                    onClick={() => navigate(`edit/${question.id}`)}
                   >
                     Edit
                   </Button>
@@ -229,7 +218,7 @@ const Course = () => {
 
       <TablePagination
         component="div"
-        count={filteredCourses.length}
+        count={filteredQuestions.length}
         page={page}
         onPageChange={handlePageChange}
         rowsPerPage={rowsPerPage}
@@ -240,4 +229,4 @@ const Course = () => {
   );
 };
 
-export default Course;
+export default Question;

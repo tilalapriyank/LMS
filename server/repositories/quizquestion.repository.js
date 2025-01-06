@@ -41,6 +41,10 @@ class QuizQuestionRepository {
     }
     return null;
   }
+  
+  async countQuizQuestionsByQuizId(quizId) {
+    return QuizQuestion.count({ where: { quizId } });
+  }
 }
 
 export default new QuizQuestionRepository();
