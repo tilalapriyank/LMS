@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Drawer,
@@ -9,7 +9,7 @@ import {
   ListItemText,
   Typography,
   Divider,
-} from '@mui/material';
+} from "@mui/material";
 import {
   Dashboard as DashboardIcon,
   Book as CourseIcon,
@@ -20,32 +20,32 @@ import {
   Tag as TagsIcon,
   Settings as SettingsIcon,
   People as UsersIcon,
-} from '@mui/icons-material';
+} from "@mui/icons-material";
 
 const drawerWidth = 240;
 
-const DashboardDrawer = ({ mobileOpen, handleDrawerToggle, onMenuClick }) => {
+const DashboardDrawer = ({ mobileOpen, handleDrawerToggle, onMenuClick, selectedMenu }) => {
   const menuItems = [
-    { text: 'Dashboard', icon: <DashboardIcon /> },
-    { text: 'Course', icon: <CourseIcon /> },
-    { text: 'Lesson', icon: <LessonIcon /> },
-    { text: 'Quiz', icon: <QuizIcon /> },
-    { text: 'Question', icon: <QuestionIcon /> },
-    { text: 'Category', icon: <CategoryIcon /> },
-    { text: 'Tags', icon: <TagsIcon /> },
-    { text: 'Settings', icon: <SettingsIcon /> },
-    { text: 'Users', icon: <UsersIcon /> },
+    { text: "Dashboard", icon: <DashboardIcon />, route: "/dashboard" },
+    { text: "Course", icon: <CourseIcon />, route: "/dashboard/course" },
+    { text: "Lesson", icon: <LessonIcon />, route: "/dashboard/lesson" },
+    { text: "Quiz", icon: <QuizIcon />, route: "/dashboard/quiz" },
+    { text: "Question", icon: <QuestionIcon />, route: "/dashboard/question" },
+    { text: "Category", icon: <CategoryIcon />, route: "/dashboard/category" },
+    { text: "Tags", icon: <TagsIcon />, route: "/dashboard/tags" },
+    { text: "Settings", icon: <SettingsIcon />, route: "/dashboard/settings" },
+    { text: "Users", icon: <UsersIcon />, route: "/dashboard/users" },
   ];
 
   const drawerContent = (
     <div>
       <Toolbar
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#1976d2',
-          color: '#fff',
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#1976d2",
+          color: "#fff",
         }}
       >
         <Typography variant="h6" noWrap>
@@ -57,14 +57,15 @@ const DashboardDrawer = ({ mobileOpen, handleDrawerToggle, onMenuClick }) => {
         {menuItems.map((item) => (
           <ListItemButton
             key={item.text}
-            onClick={() => onMenuClick(item.text)} // Trigger onMenuClick
+            onClick={() => onMenuClick(item.text, item.route)}  // Pass menu name and route
             sx={{
-              '&:hover': {
-                backgroundColor: '#f4f4f4',
+              backgroundColor: selectedMenu === item.text ? "#f4f4f4" : "transparent", // Highlight selected menu
+              "&:hover": {
+                backgroundColor: "#f4f4f4",
               },
             }}
           >
-            <ListItemIcon sx={{ color: '#1976d2' }}>{item.icon}</ListItemIcon>
+            <ListItemIcon sx={{ color: "#1976d2" }}>{item.icon}</ListItemIcon>
             <ListItemText primary={item.text} />
           </ListItemButton>
         ))}
@@ -78,7 +79,7 @@ const DashboardDrawer = ({ mobileOpen, handleDrawerToggle, onMenuClick }) => {
       sx={{
         width: { sm: drawerWidth },
         flexShrink: { sm: 0 },
-        backgroundColor: '#f8f9fa',
+        backgroundColor: "#f8f9fa",
       }}
       aria-label="dashboard folders"
     >
@@ -89,9 +90,9 @@ const DashboardDrawer = ({ mobileOpen, handleDrawerToggle, onMenuClick }) => {
         onClose={handleDrawerToggle}
         ModalProps={{ keepMounted: true }}
         sx={{
-          display: { xs: 'block', sm: 'none' },
-          '& .MuiDrawer-paper': {
-            boxSizing: 'border-box',
+          display: { xs: "block", sm: "none" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
             width: drawerWidth,
           },
         }}
@@ -102,9 +103,9 @@ const DashboardDrawer = ({ mobileOpen, handleDrawerToggle, onMenuClick }) => {
       <Drawer
         variant="permanent"
         sx={{
-          display: { xs: 'none', sm: 'block' },
-          '& .MuiDrawer-paper': {
-            boxSizing: 'border-box',
+          display: { xs: "none", sm: "block" },
+          "& .MuiDrawer-paper": {
+            boxSizing: "border-box",
             width: drawerWidth,
           },
         }}

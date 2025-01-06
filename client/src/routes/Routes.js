@@ -10,7 +10,10 @@ import RegistrationPage from "../pages/registration/RegistrationPage";
 import Home from "../pages/home/Home";
 import AdminDashboard from "../pages/admin/dashboard/AdminDashboard";
 import CoursesList from "../pages/Course";
-import { Box } from "@mui/material";
+import DashboardContent from "../components/admin/dashboard/content/main";
+import CourseList from "../components/admin/dashboard/content/course/Course";
+import Setting from "../components/admin/dashboard/content/setting/Setting";
+import { Box, Typography } from "@mui/material";
 
 const RoutesComponent = () => {
   const { role, isAuthenticated } = useContext(UserContext); // Get user role and authentication status
@@ -37,18 +40,59 @@ const RoutesComponent = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegistrationPage />} />
+
+          {/* Admin Dashboard Route */}
           <Route
-            path="/dashboard"
+            path="/dashboard/*"
             element={
               isAuthenticated ? (
-                <AdminDashboard />
+                <AdminDashboard /> // Use the Dashboard layout
               ) : role === "instructor" ? (
                 <InstructorPage />
               ) : (
-                <StudentPage />
+                <AdminDashboard />
               )
             }
-          />
+          >
+            {/* Nested routes for dashboard */}
+            <Route path="" element={<DashboardContent />} />
+            <Route path="course" element={<CourseList />} />
+            <Route
+              path="lesson"
+              element={<Typography>Create and edit Lessons.</Typography>}
+            />
+            <Route
+              path="quiz"
+              element={<Typography>Build engaging Quizzes.</Typography>}
+            />
+            <Route
+              path="question"
+              element={
+                <Typography>Manage Questions for your Quizzes.</Typography>
+              }
+            />
+            <Route
+              path="category"
+              element={
+                <Typography>Organize content using Categories.</Typography>
+              }
+            />
+            <Route
+              path="tags"
+              element={
+                <Typography>
+                  Tag your content for better searchability.
+                </Typography>
+              }
+            />
+            <Route path="settings" element={<Setting />} />
+            <Route
+              path="users"
+              element={<Typography>Manage Users and their roles.</Typography>}
+            />
+          </Route>
+
+          {/* Other routes */}
           <Route path="/course" element={<CoursesList />} />
           <Route path="*" element={<Home />} />
         </Routes>

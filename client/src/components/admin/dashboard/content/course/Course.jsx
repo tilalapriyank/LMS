@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   TextField,
@@ -17,42 +17,29 @@ import {
   Paper,
   Typography
 } from "@mui/material";
-
-const coursesData = [
-  {
-    name: "React Basics",
-    category: "Web Development",
-    author: "John Doe",
-    content: "Introduction to React",
-    date: "2024-01-01",
-    status: "published",
-  },
-  {
-    name: "Advanced Angular",
-    category: "Web Development",
-    author: "Jane Smith",
-    content: "Deep dive into Angular",
-    date: "2024-01-15",
-    status: "mine",
-  },
-  {
-    name: "Data Science 101",
-    category: "Data Science",
-    author: "Alice Johnson",
-    content: "Learn Data Science Basics",
-    date: "2024-02-01",
-    status: "published",
-  },
-];
+import {courseList} from "../../../../../api/courseList";
 
 const Course = () => {
-  const [courses, setCourses] = useState(coursesData);
+  const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [activeTab, setActiveTab] = useState("all");
+
+  // Fetch data from API
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await courseList(); 
+        setCourses(response); 
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+    fetchCourses();
+  }, []); // Empty dependency array to run only once on mount
 
   const handleSort = (property) => {
     const isAscending = orderBy === property && order === "asc";
@@ -109,102 +96,102 @@ const Course = () => {
         </Button>
       </Toolbar>
 
-        <Tabs value={activeTab} onChange={handleTabChange} sx={{ marginBottom: 2 }}>
-          <Tab label="All" value="all" />
-          <Tab label="Published" value="published" />
-          <Tab label="Mine" value="mine" />
-        </Tabs>
+      <Tabs value={activeTab} onChange={handleTabChange} sx={{ marginBottom: 2 }}>
+        <Tab label="All" value="all" />
+        <Tab label="Published" value="published" />
+        <Tab label="Mine" value="mine" />
+      </Tabs>
 
-        <Box sx={{ display: "flex", justifyContent: "right", marginBottom: 2 }}>
-          <TextField
-            variant="outlined"
-            placeholder="Search courses..."
-            value={searchTerm}
-            onChange={handleSearch}
-            fullWidth
-            sx={{
-              maxWidth: 400,
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              borderRadius: 2,
-              marginTop: 2,
-            }}
-          />
-        </Box>
-
-        <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "name"}
-                    direction={orderBy === "name" ? order : "asc"}
-                    onClick={() => handleSort("name")}
-                  >
-                    Course Name
-                  </TableSortLabel>
-                </TableCell>
-                <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "category"}
-                    direction={orderBy === "category" ? order : "asc"}
-                    onClick={() => handleSort("category")}
-                  >
-                    Category
-                  </TableSortLabel>
-                </TableCell>
-                <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "author"}
-                    direction={orderBy === "author" ? order : "asc"}
-                    onClick={() => handleSort("author")}
-                  >
-                    Author
-                  </TableSortLabel>
-                </TableCell>
-                <TableCell>Content</TableCell>
-                <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "date"}
-                    direction={orderBy === "date" ? order : "asc"}
-                    onClick={() => handleSort("date")}
-                  >
-                    Date
-                  </TableSortLabel>
-                </TableCell>
-                <TableCell>Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {paginatedCourses.map((course, index) => (
-                <TableRow key={index}>
-                  <TableCell>{course.name}</TableCell>
-                  <TableCell>{course.category}</TableCell>
-                  <TableCell>{course.author}</TableCell>
-                  <TableCell>{course.content}</TableCell>
-                  <TableCell>{course.date}</TableCell>
-                  <TableCell>
-                    <Button variant="outlined" color="primary" sx={{ marginRight: 1 }}>
-                      Edit
-                    </Button>
-                    <Button variant="outlined" color="secondary">
-                      Delete
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-        <TablePagination
-          component="div"
-          count={filteredCourses.length}
-          page={page}
-          onPageChange={handlePageChange}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleRowsPerPageChange}
+      <Box sx={{ display: "flex", justifyContent: "right", marginBottom: 2 }}>
+        <TextField
+          variant="outlined"
+          placeholder="Search courses..."
+          value={searchTerm}
+          onChange={handleSearch}
+          fullWidth
+          sx={{
+            maxWidth: 400,
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            borderRadius: 2,
+            marginTop: 2,
+          }}
         />
+      </Box>
+
+      <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <TableSortLabel
+                  active={orderBy === "name"}
+                  direction={orderBy === "name" ? order : "asc"}
+                  onClick={() => handleSort("name")}
+                >
+                  Course Name
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={orderBy === "category"}
+                  direction={orderBy === "category" ? order : "asc"}
+                  onClick={() => handleSort("category")}
+                >
+                  Category
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={orderBy === "author"}
+                  direction={orderBy === "author" ? order : "asc"}
+                  onClick={() => handleSort("author")}
+                >
+                  Author
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>Content</TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={orderBy === "date"}
+                  direction={orderBy === "date" ? order : "asc"}
+                  onClick={() => handleSort("date")}
+                >
+                  Date
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {paginatedCourses.map((course, index) => (
+              <TableRow key={index}>
+                <TableCell>{course.name}</TableCell>
+                <TableCell>{course.category}</TableCell>
+                <TableCell>{course.author}</TableCell>
+                <TableCell>{course.name}</TableCell>
+                <TableCell>{course.date}</TableCell>
+                <TableCell>
+                  <Button variant="outlined" color="primary" sx={{ marginRight: 1 }}>
+                    Edit
+                  </Button>
+                  <Button variant="outlined" color="secondary">
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <TablePagination
+        component="div"
+        count={filteredCourses.length}
+        page={page}
+        onPageChange={handlePageChange}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleRowsPerPageChange}
+      />
     </Box>
   );
 };

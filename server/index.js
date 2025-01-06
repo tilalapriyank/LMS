@@ -8,6 +8,11 @@ import courseRoutes from "./routes/courseRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import lessonRoutes from "./routes/lessonRoutes.js";
 import quizRoutes from "./routes/quizRoutes.js";
+import questionRoutes from "./routes/questionRoutes.js";
+import sectionRoutes from "./routes/sectionRoutes.js";
+import quizQuestionRoutes from "./routes/quizQuestionRoutes.js";
+import quizMetaRoutes from "./routes/quizMetaRoutes.js";
+import courseMetaRoutes from "./routes/courseMetaRoutes.js";
 import helmet from "helmet";
 import morgan from "morgan";
 
@@ -30,6 +35,11 @@ app.use("/api/courses", courseRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/lessons", lessonRoutes);
 app.use("/api/quiz", quizRoutes);
+app.use("/api/questions", questionRoutes);
+app.use("/api/sections", sectionRoutes);
+app.use("/api/quizquestions", quizQuestionRoutes);
+app.use("/api/quiz-metas", quizMetaRoutes);
+app.use("/api/course-metas", courseMetaRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

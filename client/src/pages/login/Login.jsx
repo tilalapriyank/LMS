@@ -20,7 +20,7 @@ const Login = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
-        // mode: "cors",
+        mode: "cors",
       });
 
       if (!response.ok) {
