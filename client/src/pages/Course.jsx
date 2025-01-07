@@ -15,6 +15,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import { courseList } from "../api/course";
 
 const CoursesList = () => {
   const [courses, setCourses] = useState([]);
@@ -27,10 +28,9 @@ const CoursesList = () => {
   const [sort, setSort] = useState("");
 
   useEffect(() => {
-    // Fetch courses data from API
     const fetchCourses = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/courses/");
+        const response = courseList();
         const data = await response.json();
         setCourses(data);
       } catch (error) {

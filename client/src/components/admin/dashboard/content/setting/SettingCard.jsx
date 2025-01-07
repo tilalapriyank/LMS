@@ -44,13 +44,13 @@ const SettingCard = ({ setting, value, onChange }) => {
           />
         );
 
-      case "color": // Color picker input
+      case "color": 
         return (
           <TextField
             variant="outlined"
             fullWidth
             type="color"
-            value={value || "#000000"} // Default color
+            value={value || "#000000"} 
             onChange={(e) => onChange(id, e.target.value)}
           />
         );

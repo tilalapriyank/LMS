@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../../api/registrationUser';
+import { GoogleLogin } from '@react-oauth/google';
+import FacebookLogin from 'react-facebook-login';
 
 const RegistrationForm = () => {
   const [name, setUsername] = useState('');
@@ -32,6 +34,22 @@ const RegistrationForm = () => {
     } catch (error) {
       console.error('Error:', error);
       alert('Error occurred while registering');
+    }
+  };
+
+  const handleGoogleSuccess = (response) => {
+    const { credential } = response;
+    // Process the Google credential, e.g., send it to your backend for registration
+    alert(`Google login successful: ${credential}`);
+    navigate('/dashboard'); // Redirect to your desired page
+  };
+
+  const handleFacebookResponse = (response) => {
+    if (response.status === 'unknown') {
+      alert('Facebook login failed');
+    } else {
+      alert(`Facebook login successful: ${response.name}`);
+      navigate('/dashboard'); // Redirect to your desired page
     }
   };
 
@@ -87,6 +105,31 @@ const RegistrationForm = () => {
       <Button variant="contained" color="primary" fullWidth onClick={handleSubmit} sx={{ mt: 2 }}>
         Register
       </Button>
+
+      {/* Google Login */}
+      <GoogleLogin
+        onSuccess={handleGoogleSuccess}
+        onError={(error) => console.error('Google login failed', error)}
+        useOneTap
+        shape="rectangular"
+        width="100%"
+        theme="outline"
+        text="signup_with"
+        size="large"
+        sx={{ mt: 2 }}
+      />
+
+      {/* Facebook Login */}
+      <FacebookLogin
+        appId="YOUR_FACEBOOK_APP_ID"
+        autoLoad={false}
+        fields="name,email,picture"
+        callback={handleFacebookResponse}
+        cssClass="facebook-btn"
+        icon="fa-facebook"
+        textButton="Sign up with Facebook"
+        style={{ marginTop: '16px' }}
+      />
     </Box>
   );
 };
