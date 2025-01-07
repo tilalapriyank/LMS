@@ -18,6 +18,7 @@ import categoryRoutes from "./routes/categoryRoutes.js";
 import lmsRoutes from "./routes/lmsRoutes.js";
 import tagRoutes from "./routes/tagRoutes.js";
 import quecategoryRoutes from "./routes/questionCategoryRoutes.js";
+import settingRoutes from "./routes/settingRoutes.js";
 import helmet from "helmet";
 import morgan from "morgan";
 
@@ -50,6 +51,7 @@ app.use("/api/category", categoryRoutes);
 app.use("/api/tag", tagRoutes);
 app.use("/api/lms", lmsRoutes);
 app.use("/api/question-category", quecategoryRoutes);
+app.use("/api/setting", settingRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

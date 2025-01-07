@@ -19,6 +19,7 @@ import CourseTag from "./CourseTag.js";
 import CourseCategory from "./CourseCategory.js";
 import QuizQuestion from "./QuizQuestion.js";
 import SectionItem from "./SectionItem.js";
+import Setting from "./Setting.js";
 
 const setupAssociations = () => {
   UserMeta.belongsTo(User, { foreignKey: "userId" });
@@ -111,5 +112,6 @@ export {
   CourseCategory,
   QuizQuestion,
   SectionItem,
+  Setting,
   setupAssociations,
 };

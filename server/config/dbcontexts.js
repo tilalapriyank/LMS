@@ -19,6 +19,7 @@ import {
   CourseCategory,
   QuizQuestion,
   SectionItem,
+  Setting,
   setupAssociations,
 } from "../models/index.js";
 import { defaultData } from "../seed.js";
