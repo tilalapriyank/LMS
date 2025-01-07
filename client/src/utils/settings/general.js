@@ -11,7 +11,12 @@ export const general = [
     title: "Date Format",
     description: "Select the format for displaying dates.",
     type: "select",
-    options: ["Y-m-d", "d-m-Y", "m/d/Y", "d/m/Y"],
+    options: [
+      { label: "Y-m-d", value: "Y-m-d" },
+      { label: "d-m-Y", value: "d-m-Y" },
+      { label: "m/d/Y", value: "m/d/Y" },
+      { label: "d/m/Y", value: "d/m/Y" },
+    ],
     value: "Y-m-d",
   },
   {
@@ -19,7 +24,13 @@ export const general = [
     title: "Currency",
     description: "Choose the default currency.",
     type: "select",
-    options: ["USD", "EUR", "INR", "GBP", "AUD"],
+    options: [
+      { label: "USD", value: "USD" },
+      { label: "EUR", value: "EUR" },
+      { label: "INR", value: "INR" },
+      { label: "GBP", value: "GBP" },
+      { label: "AUD", value: "AUD" },
+    ],
     value: "USD",
   },
   {
@@ -27,7 +38,10 @@ export const general = [
     title: "Theme",
     description: "Select the theme for the interface.",
     type: "select",
-    options: ["light", "dark"],
+    options: [
+      { label: "Light", value: "light" },
+      { label: "Dark", value: "dark" },
+    ],
     value: "light",
   },
   {
@@ -43,5 +57,5 @@ export const general = [
     description: "Enable or disable keyboard shortcuts.",
     type: "switch",
     value: true,
-  }
+  },
 ];

@@ -2,23 +2,21 @@ export const course = [
   {
     id: "courseVisibility",
     title: "Course Visibility",
-    description: "Students must be logged in to view course",
+    description: "Students must be logged in to view the course.",
     type: "switch",
     value: false,
   },
   {
     id: "courseContentAccess",
     title: "Course Content Access",
-    description:
-      "Allow instructors and admins to view the course content without enrolling",
+    description: "Allow instructors and admins to view the course content without enrolling.",
     type: "switch",
     value: false,
   },
   {
     id: "autoStart",
     title: "Auto Start",
-    description:
-      "Students will get started on courses immediately after successfully purchasing them.",
+    description: "Students will get started on courses immediately after successfully purchasing them.",
     type: "switch",
     value: false,
   },
@@ -32,23 +30,21 @@ export const course = [
   {
     id: "reTakeCourse",
     title: "Re-Take Course",
-    description: "The number of times a user can learn again from this course.",
+    description: "The number of times a user can retake this course.",
     type: "number",
     value: 5,
   },
   {
     id: "passingGrade",
     title: "Passing Grade (%)",
-    description:
-      "Set the passing grade percentage required to complete the course.",
+    description: "Set the passing grade percentage required to complete the course.",
     type: "number",
     value: 70,
   },
   {
     id: "autoLoadNextItem",
     title: "Automatically Load Next Item",
-    description:
-      "Automatically load the next item when the current one is completed.",
+    description: "Automatically load the next item when the current one is completed.",
     type: "switch",
     value: true,
   },
@@ -61,23 +57,23 @@ export const course = [
   },
   {
     id: "fileType",
-    title: "Allowed File Type",
+    title: "Allowed File Types",
     description: "Specify the allowed file types for course uploads.",
     type: "multiple_select",
     options: ["pdf", "docx", "pptx"],
-    value: "pdf, docx, pptx",
+    value: ["pdf", "docx", "pptx"],
   },
   {
     id: "uploadFiles",
     title: "Upload Files",
-    description: "Number files the user can upload.",
+    description: "Number of files the user can upload.",
     type: "number",
     value: 2,
   },
   {
     id: "fileSizeLimit",
     title: "File Size Limit",
-    description: "Set Maximum Attachment size for upload (MB)",
+    description: "Set the maximum attachment size for upload (in MB).",
     type: "number",
     value: 50,
   },
@@ -91,8 +87,7 @@ export const course = [
   {
     id: "urlNofollow",
     title: "URL Nofollow",
-    description:
-      "Set whether external links should have a 'nofollow' attribute.",
+    description: "Set whether external links should have a 'nofollow' attribute.",
     type: "switch",
     value: false,
   },
@@ -100,15 +95,14 @@ export const course = [
     id: "preferredVideoSource",
     title: "Preferred Video Source",
     description: "Choose the preferred video source for course videos.",
-    type: "checkbox",
+    type: "multiple_select",
     options: ["YouTube", "Vimeo", "Self-hosted"],
-    value: "YouTube",
+    value: ["YouTube"],
   },
   {
     id: "courseTranslations",
     title: "Course Translations",
-    description:
-      "Enable or disable course translations for multiple languages.",
+    description: "Enable or disable course translations for multiple languages.",
     type: "switch",
     value: true,
   },

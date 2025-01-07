@@ -14,11 +14,19 @@ import {
 
 const DynamicSettings = ({ settings = [], onChange }) => {
   const renderSetting = (setting) => {
+    const cardStyle = {
+      marginBottom: 2,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      height: "100%", // Ensure all cards have the same height
+    };
+
     switch (setting.type) {
       case "number":
         return (
           <Grid item md={12} key={setting.id}>
-            <Card sx={{ marginBottom: 2 }}>
+            <Card sx={cardStyle}>
               <CardContent>
                 <Typography variant="h6">{setting.title}</Typography>
                 <TextField
@@ -42,7 +50,7 @@ const DynamicSettings = ({ settings = [], onChange }) => {
       case "switch":
         return (
           <Grid item md={12} key={setting.id}>
-            <Card sx={{ marginBottom: 2 }}>
+            <Card sx={cardStyle}>
               <CardContent>
                 <Typography variant="h6">{setting.title}</Typography>
                 <Switch
@@ -58,38 +66,10 @@ const DynamicSettings = ({ settings = [], onChange }) => {
           </Grid>
         );
 
-      case "select":
-        return (
-          <Grid item md={12} key={setting.id}>
-            <Card sx={{ marginBottom: 2 }}>
-              <CardContent>
-                <Typography variant="h6">{setting.title}</Typography>
-                <TextField
-                  select
-                  value={setting.value}
-                  onChange={(e) => onChange(setting.id, e.target.value)}
-                  fullWidth
-                  margin="normal"
-                  helperText={setting.description}
-                  inputProps={{
-                    "aria-label": setting.title,
-                  }}
-                >
-                  {setting.options.map((option) => (
-                    <MenuItem key={option} value={option}>
-                      {option}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </CardContent>
-            </Card>
-          </Grid>
-        );
-
       case "multiple_select":
         return (
           <Grid item md={12} key={setting.id}>
-            <Card sx={{ marginBottom: 2 }}>
+            <Card sx={cardStyle}>
               <CardContent>
                 <Typography variant="h6">{setting.title}</Typography>
                 <TextField
@@ -115,10 +95,38 @@ const DynamicSettings = ({ settings = [], onChange }) => {
           </Grid>
         );
 
+      case "select":
+        return (
+          <Grid item md={12} key={setting.id}>
+            <Card sx={cardStyle}>
+              <CardContent>
+                <Typography variant="h6">{setting.title}</Typography>
+                <TextField
+                  select
+                  value={setting.value}
+                  onChange={(e) => onChange(setting.id, e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  helperText={setting.description}
+                  inputProps={{
+                    "aria-label": setting.title,
+                  }}
+                >
+                  {setting.options.map((option) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </CardContent>
+            </Card>
+          </Grid>
+        );
+
       case "checkbox":
         return (
           <Grid item md={12} key={setting.id}>
-            <Card sx={{ marginBottom: 2 }}>
+            <Card sx={cardStyle}>
               <CardContent>
                 <Typography variant="h6">{setting.title}</Typography>
                 <FormControlLabel
@@ -141,7 +149,7 @@ const DynamicSettings = ({ settings = [], onChange }) => {
       case "color":
         return (
           <Grid item md={12} key={setting.id}>
-            <Card sx={{ marginBottom: 2 }}>
+            <Card sx={cardStyle}>
               <CardContent>
                 <Typography variant="h6">{setting.title}</Typography>
                 <TextField
@@ -163,7 +171,7 @@ const DynamicSettings = ({ settings = [], onChange }) => {
       case "text":
         return (
           <Grid item md={12} key={setting.id}>
-            <Card sx={{ marginBottom: 2 }}>
+            <Card sx={cardStyle}>
               <CardContent>
                 <Typography variant="h6">{setting.title}</Typography>
                 <TextField
@@ -177,20 +185,6 @@ const DynamicSettings = ({ settings = [], onChange }) => {
                     "aria-label": setting.title,
                   }}
                 />
-              </CardContent>
-            </Card>
-          </Grid>
-        );
-
-      case "group":
-        return (
-          <Grid item md={12} key={setting.id}>
-            <Card sx={{ marginBottom: 2 }}>
-              <CardContent>
-                <Typography variant="h6">{setting.title}</Typography>
-                <Grid container spacing={2}>
-                  {setting.fields.map((field) => renderSetting(field))}
-                </Grid>
               </CardContent>
             </Card>
           </Grid>
