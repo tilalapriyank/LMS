@@ -20,6 +20,7 @@ import {
 import { quizList, questionCount } from "../../../../../api/quiz";
 import { useNavigate } from "react-router-dom";
 import { itemCourseByid } from "../../../../../api/itemcourse";
+import { author } from "../../../../../api/user";
 
 const Quiz = () => {
   const [quizzes, setQuizzes] = useState([]); // State for quizzes
@@ -59,6 +60,16 @@ const Quiz = () => {
 
         setCourses(courseData);
         setQuestions(questionData);
+
+        const authorPromises = quizResponse.map((course) =>
+          author(course.author)
+        );
+        const authorResponses = await Promise.all(authorPromises);
+        const coursesWithAuthors = quizResponse.map((course, index) => ({
+          ...course,
+          authorName: authorResponses[index].name,
+        }));
+        setQuizzes(coursesWithAuthors);
       } catch (error) {
         console.error("Error fetching quizzes:", error);
       }
@@ -202,7 +213,7 @@ const Quiz = () => {
             {paginatedQuizzes.map((quiz, index) => (
               <TableRow key={index}>
                 <TableCell>{quiz.name}</TableCell>
-                <TableCell>{quiz.author}</TableCell>
+                <TableCell>{quiz.authorName || "Unknown Author"}</TableCell>
                 <TableCell>{getCourseName(quiz.id)}</TableCell>
                 <TableCell>{getQuestionCount(quiz.id)}</TableCell>
                 <TableCell>

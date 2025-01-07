@@ -3,6 +3,8 @@ import CategoryRepository from "../repositories/category.repository.js";
 import sectionitemRepository from "../repositories/sectionitem.repository.js";
 import sectionRepository from "../repositories/section.repository.js";
 import courseRespository from "../repositories/course.respository.js";
+import quizquestionRepository from "../repositories/quizquestion.repository.js";
+import quizRespository from "../repositories/quiz.respository.js";
 
 class LMSController {
   async getCategoryNamesByCourseId(req, res) {
@@ -46,6 +48,29 @@ class LMSController {
       const courseName = await courseRespository.getNameById(courseId);
 
       res.status(200).json(courseName);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ message: "An error occurred while fetching data." });
+    }
+  }
+
+  async getQuizNameByQid(req, res) {
+    try {
+      const { questionId } = req.params;
+      const data = await quizquestionRepository.getQuizQuestionsByQuestionId(
+        questionId
+      );
+      if (!data || data.length === 0) {
+        return res.status(404).json({ message: "No data found." });
+      }
+      const quizId = data[0].quizId;
+
+      const quiz = await quizRespository.findById(quizId);
+
+      const quizName = quiz.name;
+      res.status(200).json(quizName);
     } catch (error) {
       console.error(error);
       res

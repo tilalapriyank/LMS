@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.get("/course-category/:courseId", LMSController.getCategoryNamesByCourseId);
 router.get("/item-course/:itemId", LMSController.getCourseNameByItemId);
+router.get("/quiz-name/:questionId", LMSController.getQuizNameByQid);
 
 export default router;

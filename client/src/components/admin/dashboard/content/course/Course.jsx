@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import { courseList, courseCategoryByCid } from "../../../../../api/course";
 import { useNavigate } from "react-router-dom";
+import { author } from "../../../../../api/user";
 
 const Course = () => {
   const [courses, setCourses] = useState([]);
@@ -31,28 +32,33 @@ const Course = () => {
   const [activeTab, setActiveTab] = useState("all");
   const navigate = useNavigate();
 
-  // Fetch courses and categories from API
   useEffect(() => {
     const fetchData = async () => {
       try {
         const courseResponse = await courseList();
         setCourses(courseResponse);
 
-        // Fetch categories for each course
         const categoryPromises = courseResponse.map((course) =>
           courseCategoryByCid(course.id)
         );
-
         const categoryResponses = await Promise.all(categoryPromises);
-        // Store category data in state
         const categoryData = categoryResponses.map((response, index) => ({
           courseId: courseResponse[index].id,
-          category: response, // Assuming response contains category data
+          category: response,
         }));
-
         setCategories(categoryData);
+
+        const authorPromises = courseResponse.map(
+          (course) => author(course.author)
+        );
+        const authorResponses = await Promise.all(authorPromises);
+        const coursesWithAuthors = courseResponse.map((course, index) => ({
+          ...course,
+          authorName: authorResponses[index].name,
+        }));
+        setCourses(coursesWithAuthors);
       } catch (error) {
-        console.error("Error fetching courses or categories:", error);
+        console.error("Error fetching data:", error);
       }
     };
     fetchData();
@@ -197,7 +203,7 @@ const Course = () => {
               <TableRow key={index}>
                 <TableCell>{course.name}</TableCell>
                 <TableCell>{getCategoryName(course.id)}</TableCell>
-                <TableCell>{course.author}</TableCell>
+                <TableCell>{course.authorName || "Unknown Author"}</TableCell>
                 <TableCell>{course.name}</TableCell>
                 <TableCell>
                   {course.createdAt

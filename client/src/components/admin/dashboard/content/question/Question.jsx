@@ -17,13 +17,13 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { questionList } from "../../../../../api/question";
+import { questionList, quizName } from "../../../../../api/question";
 import { useNavigate } from "react-router-dom";
-import { itemCourseByid } from "../../../../../api/itemcourse";
+import { author } from "../../../../../api/user";
 
 const Question = () => {
   const [questions, setQuestions] = useState([]);
-  const [courses, setCourses] = useState([]);
+  const [quizs, setquizs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
@@ -38,17 +38,27 @@ const Question = () => {
         const questionResponse = await questionList();
         setQuestions(questionResponse);
 
-        const coursePromises = questionResponse.map((question) =>
-          itemCourseByid(question.id)
+        const quizPromises = questionResponse.map((question) =>
+          quizName(question.id)
         );
-        const courseResponses = await Promise.all(coursePromises);
+        const quizResponses = await Promise.all(quizPromises);
 
-        const courseData = courseResponses.map((response, index) => ({
+        const quizData = quizResponses.map((response, index) => ({
           itemId: questionResponse[index].id,
-          course: response,
+          quiz: response,
         }));
 
-        setCourses(courseData);
+        setquizs(quizData);
+
+        const authorPromises = questionResponse.map((course) =>
+          author(course.author)
+        );
+        const authorResponses = await Promise.all(authorPromises);
+        const coursesWithAuthors = questionResponse.map((course, index) => ({
+          ...course,
+          authorName: authorResponses[index].name,
+        }));
+        setQuestions(coursesWithAuthors);
       } catch (error) {
         console.error("Error fetching questions:", error);
       }
@@ -79,9 +89,9 @@ const Question = () => {
     setActiveTab(newValue);
   };
 
-  const getCourseName = (itemId) => {
-    const course = courses.find((cat) => cat.itemId === itemId);
-    return course ? course.course : "-";
+  const getquizName = (itemId) => {
+    const quiz = quizs.find((cat) => cat.itemId === itemId);
+    return quiz ? quiz.quiz : "-";
   };
 
   const filteredQuestions = questions
@@ -169,7 +179,8 @@ const Question = () => {
                   Author
                 </TableSortLabel>
               </TableCell>
-              <TableCell>Course</TableCell>
+              <TableCell>Quiz</TableCell>
+              <TableCell>Type</TableCell>
               <TableCell>
                 <TableSortLabel
                   active={orderBy === "date"}
@@ -186,8 +197,14 @@ const Question = () => {
             {paginatedQuestions.map((question, index) => (
               <TableRow key={index}>
                 <TableCell>{question.name}</TableCell>
-                <TableCell>{question.author}</TableCell>
-                <TableCell>{getCourseName(question.id)}</TableCell>
+                <TableCell>{question.authorName || "Unknown Author"}</TableCell>
+                <TableCell>{getquizName(question.id)}</TableCell>
+                <TableCell>
+                  {question.type
+                    .split("-")
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ")}
+                </TableCell>
                 <TableCell>
                   {question.createdAt
                     ? new Date(question.createdAt).toLocaleDateString("en-us", {

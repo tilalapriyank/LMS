@@ -20,6 +20,7 @@ import {
 import { lessonList } from "../../../../../api/lesson";
 import { useNavigate } from "react-router-dom";
 import { itemCourseByid } from "../../../../../api/itemcourse";
+import { author } from "../../../../../api/user";
 
 const Lesson = () => {
   const [lessons, setLessons] = useState([]);
@@ -48,6 +49,16 @@ const Lesson = () => {
           course: response,
         }));
         setCourses(courseData);
+
+        const authorPromises = lessonResponse.map((course) =>
+          author(course.author)
+        );
+        const authorResponses = await Promise.all(authorPromises);
+        const coursesWithAuthors = lessonResponse.map((course, index) => ({
+          ...course,
+          authorName: authorResponses[index].name,
+        }));
+        setLessons(coursesWithAuthors);
       } catch (error) {
         console.error("Error fetching lessons:", error);
       }
@@ -185,7 +196,7 @@ const Lesson = () => {
             {paginatedLessons.map((lesson, index) => (
               <TableRow key={index}>
                 <TableCell>{lesson.name}</TableCell>
-                <TableCell>{lesson.author}</TableCell>
+                <TableCell>{lesson.authorName || "Unknown Author"}</TableCell>
                 <TableCell>{getCourseName(lesson.id)}</TableCell>
                 <TableCell>
                   {lesson.createdAt
