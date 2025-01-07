@@ -21,3 +21,17 @@ export const saveSettings = async (settingName, settingValue) => {
     return null;
   }
 };
+
+export const getSettings = async () => {
+  try {
+    const response = await fetch(`${API_URL}/setting`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch setiings`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error setting:", error);
+    return null;
+  }
+};

@@ -14,7 +14,7 @@ const Setting = sequelize.define(
       allowNull: false,
     },
     value: {
-      type: DataTypes.JSONB,
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },

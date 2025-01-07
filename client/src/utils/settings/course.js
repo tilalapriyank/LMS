@@ -9,14 +9,16 @@ export const course = [
   {
     id: "courseContentAccess",
     title: "Course Content Access",
-    description: "Allow instructors and admins to view the course content without enrolling.",
+    description:
+      "Allow instructors and admins to view the course content without enrolling.",
     type: "switch",
     value: false,
   },
   {
     id: "autoStart",
     title: "Auto Start",
-    description: "Students will get started on courses immediately after successfully purchasing them.",
+    description:
+      "Students will get started on courses immediately after successfully purchasing them.",
     type: "switch",
     value: false,
   },
@@ -37,14 +39,16 @@ export const course = [
   {
     id: "passingGrade",
     title: "Passing Grade (%)",
-    description: "Set the passing grade percentage required to complete the course.",
+    description:
+      "Set the passing grade percentage required to complete the course.",
     type: "number",
     value: 70,
   },
   {
     id: "autoLoadNextItem",
     title: "Automatically Load Next Item",
-    description: "Automatically load the next item when the current one is completed.",
+    description:
+      "Automatically load the next item when the current one is completed.",
     type: "switch",
     value: true,
   },
@@ -59,8 +63,12 @@ export const course = [
     id: "fileType",
     title: "Allowed File Types",
     description: "Specify the allowed file types for course uploads.",
-    type: "multiple_select",
-    options: ["pdf", "docx", "pptx"],
+    type: "multiselect",
+    options: [
+      { value: "pdf", label: "PDF" },
+      { value: "docx", label: "DOCX" },
+      { value: "pptx", label: "PPTX" },
+    ],
     value: ["pdf", "docx", "pptx"],
   },
   {
@@ -87,7 +95,8 @@ export const course = [
   {
     id: "urlNofollow",
     title: "URL Nofollow",
-    description: "Set whether external links should have a 'nofollow' attribute.",
+    description:
+      "Set whether external links should have a 'nofollow' attribute.",
     type: "switch",
     value: false,
   },
@@ -95,14 +104,19 @@ export const course = [
     id: "preferredVideoSource",
     title: "Preferred Video Source",
     description: "Choose the preferred video source for course videos.",
-    type: "multiple_select",
-    options: ["YouTube", "Vimeo", "Self-hosted"],
+    type: "multiselect",
+    options: [
+      { value: "YouTube", label: "YouTube" },
+      { value: "Vimeo", label: "Vimeo" },
+      { value: "Self-hosted", label: "Self-hosted" },
+    ],
     value: ["YouTube"],
   },
   {
     id: "courseTranslations",
     title: "Course Translations",
-    description: "Enable or disable course translations for multiple languages.",
+    description:
+      "Enable or disable course translations for multiple languages.",
     type: "switch",
     value: true,
   },
