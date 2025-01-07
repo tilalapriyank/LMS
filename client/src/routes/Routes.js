@@ -17,6 +17,8 @@ import Setting from "../components/admin/dashboard/content/setting/Setting";
 import { Box, Typography } from "@mui/material";
 import Quiz from "../components/admin/dashboard/content/quiz/Quiz";
 import Question from "../components/admin/dashboard/content/question/Question";
+import Taxonomy from "../components/admin/dashboard/content/taxonomy/Taxonomy";
+import UserList from "../components/admin/dashboard/content/users/User";
 
 const RoutesComponent = () => {
   const { role, isAuthenticated } = useContext(UserContext); // Get user role and authentication status
@@ -63,25 +65,9 @@ const RoutesComponent = () => {
             <Route path="lesson" element={<LessonList />} />
             <Route path="quiz" element={<Quiz />} />
             <Route path="question" element={<Question />} />
-            <Route
-              path="category"
-              element={
-                <Typography>Organize content using Categories.</Typography>
-              }
-            />
-            <Route
-              path="tags"
-              element={
-                <Typography>
-                  Tag your content for better searchability.
-                </Typography>
-              }
-            />
+            <Route path="taxonomy" element={<Taxonomy />} />
             <Route path="settings" element={<Setting />} />
-            <Route
-              path="users"
-              element={<Typography>Manage Users and their roles.</Typography>}
-            />
+            <Route path="users" element={<UserList />} />
           </Route>
 
           {/* Other routes */}

@@ -16,6 +16,8 @@ import {
   Tab,
   Paper,
   Typography,
+  CircularProgress,
+  Snackbar,
 } from "@mui/material";
 import { courseList, courseCategoryByCid } from "../../../../../api/course";
 import { useNavigate } from "react-router-dom";
@@ -23,42 +25,50 @@ import { author } from "../../../../../api/user";
 
 const Course = () => {
   const [courses, setCourses] = useState([]);
-  const [categories, setCategories] = useState([]); // State for storing category names
+  const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [activeTab, setActiveTab] = useState("all");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const courseResponse = await courseList();
-        setCourses(courseResponse);
-
         const categoryPromises = courseResponse.map((course) =>
           courseCategoryByCid(course.id)
         );
         const categoryResponses = await Promise.all(categoryPromises);
-        const categoryData = categoryResponses.map((response, index) => ({
+
+        const categoriesData = categoryResponses.map((response, index) => ({
           courseId: courseResponse[index].id,
           category: response,
         }));
-        setCategories(categoryData);
+        setCategories(categoriesData);
 
-        const authorPromises = courseResponse.map(
-          (course) => author(course.author)
+        const authorPromises = courseResponse.map((course) =>
+          author(course.author)
         );
         const authorResponses = await Promise.all(authorPromises);
-        const coursesWithAuthors = courseResponse.map((course, index) => ({
+
+        const enrichedCourses = courseResponse.map((course, index) => ({
           ...course,
-          authorName: authorResponses[index].name,
+          authorName: authorResponses[index]?.name || "Unknown Author",
         }));
-        setCourses(coursesWithAuthors);
+        setCourses(enrichedCourses);
       } catch (error) {
+        setError("Error fetching data. Please try again later.");
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -70,22 +80,16 @@ const Course = () => {
     setOrderBy(property);
   };
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  const handleSearch = (e) => setSearchTerm(e.target.value);
 
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
-  };
+  const handlePageChange = (_, newPage) => setPage(newPage);
 
-  const handleRowsPerPageChange = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+  const handleRowsPerPageChange = (e) => {
+    setRowsPerPage(parseInt(e.target.value, 10));
     setPage(0);
   };
 
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-  };
+  const handleTabChange = (_, newValue) => setActiveTab(newValue);
 
   const getCategoryName = (courseId) => {
     const category = categories.find((cat) => cat.courseId === courseId);
@@ -114,6 +118,14 @@ const Course = () => {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
+
+  const handleDelete = (courseId) => {
+    // Add delete functionality here
+    console.log(`Delete course with ID: ${courseId}`);
+    // After deletion, show a confirmation message or update state
+    setOpenSnackbar(true);
+  };
+
   return (
     <Box>
       <Toolbar sx={{ justifyContent: "space-between", marginBottom: 2 }}>
@@ -122,17 +134,13 @@ const Course = () => {
           variant="contained"
           color="primary"
           sx={{ padding: "10px 20px" }}
-          onClick={() => navigate(`add/`)}
+          onClick={() => navigate("add/")}
         >
           Add New Course
         </Button>
       </Toolbar>
 
-      <Tabs
-        value={activeTab}
-        onChange={handleTabChange}
-        sx={{ marginBottom: 2 }}
-      >
+      <Tabs value={activeTab} onChange={handleTabChange} sx={{ marginBottom: 2 }}>
         <Tab label="All" value="all" />
         <Tab label="Published" value="published" />
         <Tab label="Draft" value="draft" />
@@ -154,84 +162,74 @@ const Course = () => {
         />
       </Box>
 
-      <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "name"}
-                  direction={orderBy === "name" ? order : "asc"}
-                  onClick={() => handleSort("name")}
-                >
-                  Course Name
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "category"}
-                  direction={orderBy === "category" ? order : "asc"}
-                  onClick={() => handleSort("category")}
-                >
-                  Category
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "author"}
-                  direction={orderBy === "author" ? order : "asc"}
-                  onClick={() => handleSort("author")}
-                >
-                  Author
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>Content</TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "date"}
-                  direction={orderBy === "date" ? order : "asc"}
-                  onClick={() => handleSort("date")}
-                >
-                  Date
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {paginatedCourses.map((course, index) => (
-              <TableRow key={index}>
-                <TableCell>{course.name}</TableCell>
-                <TableCell>{getCategoryName(course.id)}</TableCell>
-                <TableCell>{course.authorName || "Unknown Author"}</TableCell>
-                <TableCell>{course.name}</TableCell>
-                <TableCell>
-                  {course.createdAt
-                    ? new Date(course.createdAt).toLocaleDateString("en-us", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                      })
-                    : "No Date Available"}
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    sx={{ marginRight: 1 }}
-                    onClick={() => navigate(`edit/${course.id}`)}
-                  >
-                    Edit
-                  </Button>
-                  <Button variant="outlined" color="secondary">
-                    Delete
-                  </Button>
-                </TableCell>
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", padding: 2 }}>
+          <CircularProgress />
+        </Box>
+      ) : error ? (
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={6000}
+          onClose={() => setOpenSnackbar(false)}
+          message={error}
+        />
+      ) : (
+        <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {["name", "category", "author", "date"].map((column) => (
+                  <TableCell key={column}>
+                    <TableSortLabel
+                      active={orderBy === column}
+                      direction={orderBy === column ? order : "asc"}
+                      onClick={() => handleSort(column)}
+                    >
+                      {column.charAt(0).toUpperCase() + column.slice(1)}
+                    </TableSortLabel>
+                  </TableCell>
+                ))}
+                <TableCell>Action</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {paginatedCourses.map((course) => (
+                <TableRow key={course.id}>
+                  <TableCell>{course.name}</TableCell>
+                  <TableCell>{getCategoryName(course.id)}</TableCell>
+                  <TableCell>{course.authorName}</TableCell>
+                  <TableCell>
+                    {course.createdAt
+                      ? new Date(course.createdAt).toLocaleDateString("en-us", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                        })
+                      : "No Date Available"}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      sx={{ marginRight: 1 }}
+                      onClick={() => navigate(`edit/${course.id}`)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={() => handleDelete(course.id)}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
 
       <TablePagination
         component="div"

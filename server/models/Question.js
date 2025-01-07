@@ -27,6 +27,10 @@ const Question = sequelize.define(
       type: DataTypes.STRING(50),
       allowNull: false,
     },
+    status: {
+      type: DataTypes.STRING(50), 
+      allowNull: false,
+    },
   },
   {
     timestamps: true,

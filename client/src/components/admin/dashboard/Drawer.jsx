@@ -17,22 +17,25 @@ import {
   Quiz as QuizIcon,
   QuestionAnswer as QuestionIcon,
   Category as CategoryIcon,
-  Tag as TagsIcon,
   Settings as SettingsIcon,
   People as UsersIcon,
 } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
-const DashboardDrawer = ({ mobileOpen, handleDrawerToggle, onMenuClick, selectedMenu }) => {
+const DashboardDrawer = ({
+  mobileOpen,
+  handleDrawerToggle,
+  onMenuClick,
+  selectedMenu,
+}) => {
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, route: "/dashboard" },
     { text: "Course", icon: <CourseIcon />, route: "/dashboard/course" },
     { text: "Lesson", icon: <LessonIcon />, route: "/dashboard/lesson" },
     { text: "Quiz", icon: <QuizIcon />, route: "/dashboard/quiz" },
     { text: "Question", icon: <QuestionIcon />, route: "/dashboard/question" },
-    { text: "Category", icon: <CategoryIcon />, route: "/dashboard/category" },
-    { text: "Tags", icon: <TagsIcon />, route: "/dashboard/tags" },
+    { text: "Taxonomy", icon: <CategoryIcon />, route: "/dashboard/taxonomy" },
     { text: "Settings", icon: <SettingsIcon />, route: "/dashboard/settings" },
     { text: "Users", icon: <UsersIcon />, route: "/dashboard/users" },
   ];
@@ -57,9 +60,10 @@ const DashboardDrawer = ({ mobileOpen, handleDrawerToggle, onMenuClick, selected
         {menuItems.map((item) => (
           <ListItemButton
             key={item.text}
-            onClick={() => onMenuClick(item.text, item.route)}  // Pass menu name and route
+            onClick={() => onMenuClick(item.text, item.route)} // Pass menu name and route
             sx={{
-              backgroundColor: selectedMenu === item.text ? "#f4f4f4" : "transparent", // Highlight selected menu
+              backgroundColor:
+                selectedMenu === item.text ? "#f4f4f4" : "transparent", // Highlight selected menu
               "&:hover": {
                 backgroundColor: "#f4f4f4",
               },

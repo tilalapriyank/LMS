@@ -16,6 +16,8 @@ import {
   Tab,
   Paper,
   Typography,
+  CircularProgress,
+  Snackbar,
 } from "@mui/material";
 import { questionList, quizName } from "../../../../../api/question";
 import { useNavigate } from "react-router-dom";
@@ -30,37 +32,40 @@ const Question = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [activeTab, setActiveTab] = useState("all");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
+        setError("");
         const questionResponse = await questionList();
         setQuestions(questionResponse);
 
-        const quizPromises = questionResponse.map((question) =>
-          quizName(question.id)
-        );
+        const quizPromises = questionResponse.map((question) => quizName(question.id));
         const quizResponses = await Promise.all(quizPromises);
 
         const quizData = quizResponses.map((response, index) => ({
           itemId: questionResponse[index].id,
           quiz: response,
         }));
-
         setquizs(quizData);
 
-        const authorPromises = questionResponse.map((course) =>
-          author(course.author)
-        );
+        const authorPromises = questionResponse.map((course) => author(course.author));
         const authorResponses = await Promise.all(authorPromises);
+
         const coursesWithAuthors = questionResponse.map((course, index) => ({
           ...course,
           authorName: authorResponses[index].name,
         }));
         setQuestions(coursesWithAuthors);
       } catch (error) {
-        console.error("Error fetching questions:", error);
+        setError("Error fetching data. Please try again.");
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -131,11 +136,7 @@ const Question = () => {
         </Button>
       </Toolbar>
 
-      <Tabs
-        value={activeTab}
-        onChange={handleTabChange}
-        sx={{ marginBottom: 2 }}
-      >
+      <Tabs value={activeTab} onChange={handleTabChange} sx={{ marginBottom: 2 }}>
         <Tab label="All" value="all" />
         <Tab label="Published" value="published" />
         <Tab label="Draft" value="draft" />
@@ -157,81 +158,94 @@ const Question = () => {
         />
       </Box>
 
-      <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "name"}
-                  direction={orderBy === "name" ? order : "asc"}
-                  onClick={() => handleSort("name")}
-                >
-                  Question Name
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "author"}
-                  direction={orderBy === "author" ? order : "asc"}
-                  onClick={() => handleSort("author")}
-                >
-                  Author
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>Quiz</TableCell>
-              <TableCell>Type</TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "date"}
-                  direction={orderBy === "date" ? order : "asc"}
-                  onClick={() => handleSort("date")}
-                >
-                  Date
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {paginatedQuestions.map((question, index) => (
-              <TableRow key={index}>
-                <TableCell>{question.name}</TableCell>
-                <TableCell>{question.authorName || "Unknown Author"}</TableCell>
-                <TableCell>{getquizName(question.id)}</TableCell>
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 5 }}>
+          <CircularProgress />
+        </Box>
+      ) : error ? (
+        <Snackbar
+          open={Boolean(error)}
+          message={error}
+          autoHideDuration={6000}
+          onClose={() => setError("")}
+        />
+      ) : (
+        <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
                 <TableCell>
-                  {question.type
-                    .split("-")
-                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(" ")}
-                </TableCell>
-                <TableCell>
-                  {question.createdAt
-                    ? new Date(question.createdAt).toLocaleDateString("en-us", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                      })
-                    : "No Date Available"}
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    sx={{ marginRight: 1 }}
-                    onClick={() => navigate(`edit/${question.id}`)}
+                  <TableSortLabel
+                    active={orderBy === "name"}
+                    direction={orderBy === "name" ? order : "asc"}
+                    onClick={() => handleSort("name")}
                   >
-                    Edit
-                  </Button>
-                  <Button variant="outlined" color="secondary">
-                    Delete
-                  </Button>
+                    Question Name
+                  </TableSortLabel>
                 </TableCell>
+                <TableCell>
+                  <TableSortLabel
+                    active={orderBy === "author"}
+                    direction={orderBy === "author" ? order : "asc"}
+                    onClick={() => handleSort("author")}
+                  >
+                    Author
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell>Quiz</TableCell>
+                <TableCell>Type</TableCell>
+                <TableCell>
+                  <TableSortLabel
+                    active={orderBy === "date"}
+                    direction={orderBy === "date" ? order : "asc"}
+                    onClick={() => handleSort("date")}
+                  >
+                    Date
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {paginatedQuestions.map((question, index) => (
+                <TableRow key={index}>
+                  <TableCell>{question.name}</TableCell>
+                  <TableCell>{question.authorName || "Unknown Author"}</TableCell>
+                  <TableCell>{getquizName(question.id)}</TableCell>
+                  <TableCell>
+                    {question.type
+                      .split("-")
+                      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                      .join(" ")}
+                  </TableCell>
+                  <TableCell>
+                    {question.createdAt
+                      ? new Date(question.createdAt).toLocaleDateString("en-us", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                        })
+                      : "No Date Available"}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      sx={{ marginRight: 1 }}
+                      onClick={() => navigate(`edit/${question.id}`)}
+                    >
+                      Edit
+                    </Button>
+                    <Button variant="outlined" color="secondary">
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
 
       <TablePagination
         component="div"

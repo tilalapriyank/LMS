@@ -16,6 +16,7 @@ import {
   Tab,
   Paper,
   Typography,
+  CircularProgress, // Added import for the spinner
 } from "@mui/material";
 import { lessonList } from "../../../../../api/lesson";
 import { useNavigate } from "react-router-dom";
@@ -24,46 +25,47 @@ import { author } from "../../../../../api/user";
 
 const Lesson = () => {
   const [lessons, setLessons] = useState([]);
-  const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [activeTab, setActiveTab] = useState("all");
+  const [loading, setLoading] = useState(true); // New loading state
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchLessons = async () => {
       try {
+        setLoading(true); // Start loading when fetching begins
         const lessonResponse = await lessonList();
-        setLessons(lessonResponse);
-
         const coursePromises = lessonResponse.map((course) =>
           itemCourseByid(course.id)
         );
-        const lessonResponses = await Promise.all(coursePromises);
-
-        const courseData = lessonResponses.map((response, index) => ({
-          itemId: lessonResponse[index].id,
-          course: response,
-        }));
-        setCourses(courseData);
-
         const authorPromises = lessonResponse.map((course) =>
           author(course.author)
         );
-        const authorResponses = await Promise.all(authorPromises);
-        const coursesWithAuthors = lessonResponse.map((course, index) => ({
-          ...course,
-          authorName: authorResponses[index].name,
+
+        const [lessonResponses, authorResponses] = await Promise.all([
+          Promise.all(coursePromises),
+          Promise.all(authorPromises),
+        ]);
+
+        const coursesData = lessonResponse.map((lesson, index) => ({
+          ...lesson,
+          courseName: lessonResponses[index],
+          authorName: authorResponses[index]?.name || "Unknown Author",
         }));
-        setLessons(coursesWithAuthors);
+
+        setLessons(coursesData);
       } catch (error) {
         console.error("Error fetching lessons:", error);
+      } finally {
+        setLoading(false); // Set loading to false once fetching is complete
       }
     };
-    fetchData();
+
+    fetchLessons();
   }, []);
 
   const handleSort = (property) => {
@@ -72,47 +74,38 @@ const Lesson = () => {
     setOrderBy(property);
   };
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  const handleSearch = (e) => setSearchTerm(e.target.value);
 
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
-  };
+  const handlePageChange = (event, newPage) => setPage(newPage);
 
   const handleRowsPerPageChange = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-  };
+  const handleTabChange = (event, newValue) => setActiveTab(newValue);
 
-  const getCourseName = (itemId) => {
-    const course = courses.find((cat) => cat.itemId === itemId);
-    return course ? course.course : "-";
-  };
-
-  const filteredLessons = lessons
-    .filter((lesson) =>
+  const filterAndSortLessons = () => {
+    const filtered = lessons.filter((lesson) =>
       activeTab === "all"
         ? true
         : activeTab === "published"
         ? lesson.status === "published"
         : lesson.status === "draft"
-    )
-    .filter((lesson) =>
+    );
+
+    const searched = filtered.filter((lesson) =>
       lesson.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-  const sortedLessons = filteredLessons.sort((a, b) => {
-    if (a[orderBy] < b[orderBy]) return order === "asc" ? -1 : 1;
-    if (a[orderBy] > b[orderBy]) return order === "asc" ? 1 : -1;
-    return 0;
-  });
+    return searched.sort((a, b) => {
+      if (a[orderBy] < b[orderBy]) return order === "asc" ? -1 : 1;
+      if (a[orderBy] > b[orderBy]) return order === "asc" ? 1 : -1;
+      return 0;
+    });
+  };
 
-  const paginatedLessons = sortedLessons.slice(
+  const paginatedLessons = filterAndSortLessons().slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -157,78 +150,85 @@ const Lesson = () => {
         />
       </Box>
 
-      <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "name"}
-                  direction={orderBy === "name" ? order : "asc"}
-                  onClick={() => handleSort("name")}
-                >
-                  Lesson Name
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "author"}
-                  direction={orderBy === "author" ? order : "asc"}
-                  onClick={() => handleSort("author")}
-                >
-                  Author
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>Course</TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "date"}
-                  direction={orderBy === "date" ? order : "asc"}
-                  onClick={() => handleSort("date")}
-                >
-                  Date
-                </TableSortLabel>
-              </TableCell>
-              <TableCell>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {paginatedLessons.map((lesson, index) => (
-              <TableRow key={index}>
-                <TableCell>{lesson.name}</TableCell>
-                <TableCell>{lesson.authorName || "Unknown Author"}</TableCell>
-                <TableCell>{getCourseName(lesson.id)}</TableCell>
+      {/* Show loading spinner when fetching data */}
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 3 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
                 <TableCell>
-                  {lesson.createdAt
-                    ? new Date(lesson.createdAt).toLocaleDateString("en-us", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                      })
-                    : "No Date Available"}
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    sx={{ marginRight: 1 }}
-                    onClick={() => navigate(`edit/${lesson.id}`)}
+                  <TableSortLabel
+                    active={orderBy === "name"}
+                    direction={orderBy === "name" ? order : "asc"}
+                    onClick={() => handleSort("name")}
                   >
-                    Edit
-                  </Button>
-                  <Button variant="outlined" color="secondary">
-                    Delete
-                  </Button>
+                    Lesson Name
+                  </TableSortLabel>
                 </TableCell>
+                <TableCell>
+                  <TableSortLabel
+                    active={orderBy === "authorName"}
+                    direction={orderBy === "authorName" ? order : "asc"}
+                    onClick={() => handleSort("authorName")}
+                  >
+                    Author
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell>Course</TableCell>
+                <TableCell>
+                  <TableSortLabel
+                    active={orderBy === "createdAt"}
+                    direction={orderBy === "createdAt" ? order : "asc"}
+                    onClick={() => handleSort("createdAt")}
+                  >
+                    Date
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {paginatedLessons.map((lesson, index) => (
+                <TableRow key={index}>
+                  <TableCell>{lesson.name}</TableCell>
+                  <TableCell>{lesson.authorName}</TableCell>
+                  <TableCell>{lesson.courseName || "-"}</TableCell>
+                  <TableCell>
+                    {lesson.createdAt
+                      ? new Date(lesson.createdAt).toLocaleDateString("en-us", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                        })
+                      : "No Date Available"}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      sx={{ marginRight: 1 }}
+                      onClick={() => navigate(`edit/${lesson.id}`)}
+                    >
+                      Edit
+                    </Button>
+                    <Button variant="outlined" color="secondary">
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
 
       <TablePagination
         component="div"
-        count={filteredLessons.length}
+        count={filterAndSortLessons().length}
         page={page}
         onPageChange={handlePageChange}
         rowsPerPage={rowsPerPage}

@@ -1,4 +1,4 @@
-import { QuestionCategory } from "../models/QuestionCategory.js";
+import  QuestionCategory  from "../models/QuestionCategory.js";
 
 class QuestionCategoryRepository {
   // Create a new category
