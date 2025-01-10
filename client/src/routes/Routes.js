@@ -19,6 +19,7 @@ import Quiz from "../components/admin/dashboard/content/quiz/Quiz";
 import Question from "../components/admin/dashboard/content/question/Question";
 import Taxonomy from "../components/admin/dashboard/content/taxonomy/Taxonomy";
 import UserList from "../components/admin/dashboard/content/users/User";
+import AddEditCoursePage from "../components/admin/dashboard/content/course/AddEditCoursePage";
 
 const RoutesComponent = () => {
   const { role, isAuthenticated } = useContext(UserContext); // Get user role and authentication status
@@ -33,7 +34,6 @@ const RoutesComponent = () => {
         <Header />
       </Box>
 
-      {/* Main Content */}
       <Box
         component="main"
         sx={{
@@ -46,12 +46,11 @@ const RoutesComponent = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegistrationPage />} />
 
-          {/* Admin Dashboard Route */}
           <Route
             path="/dashboard/*"
             element={
               isAuthenticated ? (
-                <AdminDashboard /> // Use the Dashboard layout
+                <AdminDashboard /> 
               ) : role === "instructor" ? (
                 <InstructorPage />
               ) : (
@@ -62,6 +61,8 @@ const RoutesComponent = () => {
             {/* Nested routes for dashboard */}
             <Route path="" element={<DashboardContent />} />
             <Route path="course" element={<CourseList />} />
+            <Route path="course/add" element={<AddEditCoursePage />} />
+            <Route path="course/edit/:courseId" element={<AddEditCoursePage />} />
             <Route path="lesson" element={<LessonList />} />
             <Route path="quiz" element={<Quiz />} />
             <Route path="question" element={<Question />} />
@@ -70,13 +71,11 @@ const RoutesComponent = () => {
             <Route path="users" element={<UserList />} />
           </Route>
 
-          {/* Other routes */}
           <Route path="/course" element={<CoursesList />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </Box>
 
-      {/* Footer */}
       <Box
         component="footer"
         sx={{

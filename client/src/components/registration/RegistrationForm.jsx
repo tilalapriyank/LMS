@@ -3,7 +3,6 @@ import { Box, TextField, Button, Typography, FormControl, InputLabel, Select, Me
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../../api/registrationUser';
 import { GoogleLogin } from '@react-oauth/google';
-import FacebookLogin from 'react-facebook-login';
 
 const RegistrationForm = () => {
   const [name, setUsername] = useState('');
@@ -119,17 +118,7 @@ const RegistrationForm = () => {
         sx={{ mt: 2 }}
       />
 
-      {/* Facebook Login */}
-      <FacebookLogin
-        appId="YOUR_FACEBOOK_APP_ID"
-        autoLoad={false}
-        fields="name,email,picture"
-        callback={handleFacebookResponse}
-        cssClass="facebook-btn"
-        icon="fa-facebook"
-        textButton="Sign up with Facebook"
-        style={{ marginTop: '16px' }}
-      />
+   
     </Box>
   );
 };

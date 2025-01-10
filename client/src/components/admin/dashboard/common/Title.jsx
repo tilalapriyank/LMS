@@ -1,21 +1,22 @@
 import React from "react";
-import { Grid, TextField } from "@mui/material";
+import { TextField, Box } from "@mui/material";
 
-const Title = ({ Title, setTitle }) => {
-  return (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <TextField
-          label="Title"
-          variant="outlined"
-          fullWidth
-          value={Title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Enter the title here"
-        />
-      </Grid>
-    </Grid>
-  );
-};
+const Title = ({ title, onChange }) => (
+  <Box sx={{ width: "100%", mb: 2 }}>
+    <TextField
+      label="Title"
+      value={title}
+      onChange={(e) => onChange(e.target.value)}
+      fullWidth
+      variant="outlined"
+      sx={{
+        mb: 2,
+        "& .MuiInputLabel-root": {
+          marginBottom: "10px",
+        },
+      }}
+    />
+  </Box>
+);
 
 export default Title;

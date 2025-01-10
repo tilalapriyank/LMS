@@ -120,9 +120,7 @@ const Course = () => {
   );
 
   const handleDelete = (courseId) => {
-    // Add delete functionality here
     console.log(`Delete course with ID: ${courseId}`);
-    // After deletion, show a confirmation message or update state
     setOpenSnackbar(true);
   };
 
