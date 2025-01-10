@@ -7,6 +7,7 @@ import Image from "../../common/Image";
 import { Grid, Box, Typography, Button } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { courseSettings } from "../../../../../utils/courseSetting";
+import AdditionalSections from './AdditionalSections';
 
 const AddEditCoursePage = () => {
   const { courseId } = useParams();
@@ -92,6 +93,7 @@ const AddEditCoursePage = () => {
             onChange={(value) => handleCourseDataChange("curriculum", value)}
           />
             <Settings settings={courseSettings} onChange={handleChange} />
+            <AdditionalSections />
         </Grid>
 
         <Grid item xs={12} md={4}>

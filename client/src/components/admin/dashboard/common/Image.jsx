@@ -61,7 +61,6 @@ const Image = ({ image, onChange, onClear }) => (
         backgroundColor: '#1976d2',
         color: '#fff',
         padding: '16px',
-        textAlign: 'center',
       }}
       titleTypographyProps={{
         variant: 'h6',
