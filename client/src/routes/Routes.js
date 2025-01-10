@@ -20,6 +20,9 @@ import Question from "../components/admin/dashboard/content/question/Question";
 import Taxonomy from "../components/admin/dashboard/content/taxonomy/Taxonomy";
 import UserList from "../components/admin/dashboard/content/users/User";
 import AddEditCoursePage from "../components/admin/dashboard/content/course/AddEditCoursePage";
+import AddEditLessonPage from "../components/admin/dashboard/content/lesson/AddEditLessonPage";
+import AddEditQuizPage from "../components/admin/dashboard/content/quiz/AddEditQuizPage";
+import AddEditQuestionPage from "../components/admin/dashboard/content/question/AddEditQuestionPage";
 
 const RoutesComponent = () => {
   const { role, isAuthenticated } = useContext(UserContext); // Get user role and authentication status
@@ -63,6 +66,12 @@ const RoutesComponent = () => {
             <Route path="course" element={<CourseList />} />
             <Route path="course/add" element={<AddEditCoursePage />} />
             <Route path="course/edit/:courseId" element={<AddEditCoursePage />} />
+            <Route path="lesson/add" element={<AddEditLessonPage />} />
+            <Route path="lesson/edit/:lessonId" element={<AddEditLessonPage />} />
+            <Route path="quiz/add" element={<AddEditQuizPage />} />
+            <Route path="quiz/edit/:quizId" element={<AddEditQuizPage />} />
+            <Route path="question/add" element={<AddEditQuestionPage />} />
+            <Route path="question/edit/:questionId" element={<AddEditQuestionPage />} />
             <Route path="lesson" element={<LessonList />} />
             <Route path="quiz" element={<Quiz />} />
             <Route path="question" element={<Question />} />
