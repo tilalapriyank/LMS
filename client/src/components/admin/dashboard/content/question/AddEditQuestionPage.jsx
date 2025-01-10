@@ -78,7 +78,7 @@ const AddEditQuestionPage = () => {
             onChange={(value) => handleQuestionDataChange("questionText", value)}
           />
           <Content
-            content={JSON.stringify(questionData.options)}
+            // content={JSON.stringify(questionData.options)}
             onChange={(value) => handleQuestionDataChange("options", JSON.parse(value))}
           />
         </Grid>

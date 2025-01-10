@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Title from "../../common/Title";
 import Content from "../../common/Content";
-import Settings from "../../common/Settings";
 import Image from "../../common/Image";
 import { Grid, Box, Typography, Button } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
-import { courseSettings } from "../../../../../utils/courseSetting";
 
 
 const AddEditLessonPage = () => {
@@ -21,7 +19,7 @@ const AddEditLessonPage = () => {
     },
     image: null,
   };
-  
+
   const [lessonData, setLessonData] = useState(defaultLessonData);
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -81,7 +79,6 @@ const AddEditLessonPage = () => {
             content={lessonData.content}
             onChange={(value) => handleLessonDataChange("content", value)}
           />
-          <Settings settings={courseSettings} onChange={handleLessonDataChange} />
         </Grid>
 
         <Grid item xs={12} md={4}>
