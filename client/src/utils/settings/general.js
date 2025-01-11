@@ -1,25 +1,5 @@
 export const general = [
   {
-    id: "pagination",
-    title: "Pagination",
-    description: "Enable pagination for table views.",
-    type: "switch",
-    value: true,
-  },
-  {
-    id: "dateFormat",
-    title: "Date Format",
-    description: "Select the format for displaying dates.",
-    type: "select",
-    options: [
-      { label: "Y-m-d", value: "Y-m-d" },
-      { label: "d-m-Y", value: "d-m-Y" },
-      { label: "m/d/Y", value: "m/d/Y" },
-      { label: "d/m/Y", value: "d/m/Y" },
-    ],
-    value: "Y-m-d",
-  },
-  {
     id: "currency",
     title: "Currency",
     description: "Choose the default currency.",
@@ -32,17 +12,6 @@ export const general = [
       { label: "AUD", value: "AUD" },
     ],
     value: "USD",
-  },
-  {
-    id: "theme",
-    title: "Theme",
-    description: "Select the theme for the interface.",
-    type: "select",
-    options: [
-      { label: "Light", value: "light" },
-      { label: "Dark", value: "dark" },
-    ],
-    value: "light",
   },
   {
     id: "screenReaderCompatibility",

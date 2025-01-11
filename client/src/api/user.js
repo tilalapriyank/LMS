@@ -53,3 +53,52 @@ export const userDetails = async (id) => {
     return null; 
   }
 };
+
+export const updateUser = async (userId, user) => {
+  try {
+    const userResponse = await fetch(`${API_URL}/users/${userId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: user.name,
+        email: user.email,
+        password: user.password,
+      }),
+    });
+
+    if (!userResponse.ok) {
+      const error = await userResponse.text();
+      console.error('Error updating user details:', error);
+      return false;
+    }
+
+    const userMetaResponse = await fetch(`${API_URL}/usermeta/${userId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        first_name: user.first_name,
+        last_name: user.last_name,
+        profilePhoto: user.profilePhoto,
+      }),
+    });
+
+    if (!userMetaResponse.ok) {
+      const error = await userMetaResponse.text();
+      console.error('Error updating user meta:', error);
+      return false;
+    }
+    
+
+    console.log('User and user meta updated successfully');
+    return true;
+
+  } catch (error) {
+    console.error('Error submitting form:', error);
+    return false;
+  }
+};
+

@@ -1,4 +1,5 @@
 import UserRepository from "../repositories/user.respository.js";
+import bcrypt from 'bcrypt'; 
 
 class UserController {
   // Get a user by ID
@@ -35,16 +36,25 @@ class UserController {
     }
   }
 
-  // Update an existing user by ID
   async updateUser(req, res) {
     try {
+      const userId = req.params.id;
       const updateData = req.body;
-      const updatedUser = await UserRepository.update(req.params.id, updateData);
-      if (!updatedUser) {
+
+      if (updateData.password) {
+        const hashedPassword = await bcrypt.hash(updateData.password, 10);
+        updateData.password = hashedPassword; 
+      }
+
+      const user = await UserRepository.findById(userId);
+      if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
+
+      const updatedUser = await UserRepository.update(userId, updateData);
       res.status(200).json(updatedUser);
     } catch (error) {
+      console.error("Error updating user:", error);
       res.status(500).json({ message: "Server error", error: error.message });
     }
   }
@@ -89,7 +99,10 @@ class UserController {
   async getPaginatedUsers(req, res) {
     const { page, pageSize } = req.query;
     try {
-      const users = await UserRepository.findPaginated(parseInt(page) || 1, parseInt(pageSize) || 10);
+      const users = await UserRepository.findPaginated(
+        parseInt(page) || 1,
+        parseInt(pageSize) || 10
+      );
       res.status(200).json(users);
     } catch (error) {
       res.status(500).json({ message: "Server error", error: error.message });

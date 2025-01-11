@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import { userDetails } from "../../../../../api/user";
+import { userDetails, updateUser } from "../../../../../api/user";
 
 const UserEditPage = () => {
   const { userId } = useParams();
@@ -63,25 +63,18 @@ const UserEditPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        `http://192.168.1.19:5000/api/users/${userId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            firstName: user.first_name,
-            lastName: user.last_name,
-            displayName: user.name,
-            email: user.email,
-            password: user.password,
-            profilePhoto: user.profilePhoto,
-          }),
-        }
-      );
+      const body = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        profilePhoto: user.profilePhoto,
+      };
 
-      if (response.ok) {
+      const response = await updateUser(userId, body);
+
+      if (response) {
         console.log("User updated successfully");
         navigate("/dashboard/users");
       } else {
@@ -146,7 +139,7 @@ const UserEditPage = () => {
             {/* First Name */}
             <Grid item xs={12} sm={6}>
               <TextField
-                name="firstName"
+                name="first_name"
                 label="First Name"
                 fullWidth
                 value={user.first_name}
@@ -158,7 +151,7 @@ const UserEditPage = () => {
             {/* Last Name */}
             <Grid item xs={12} sm={6}>
               <TextField
-                name="lastName"
+                name="last_name"
                 label="Last Name"
                 fullWidth
                 value={user.last_name}
@@ -170,7 +163,7 @@ const UserEditPage = () => {
             {/* Display Name */}
             <Grid item xs={12}>
               <TextField
-                name="displayName"
+                name="name"
                 label="Display Name"
                 fullWidth
                 value={user.name}

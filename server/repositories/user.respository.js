@@ -18,8 +18,20 @@ class UserRepository {
 
   // Update an existing user by ID
   async update(id, updateData) {
-    return User.findByIdAndUpdate(id, updateData, { new: true });
+    try {
+      const [affectedRows, updatedUser] = await User.update(updateData, {
+        where: { id },
+        returning: true,  // Ensure you get the updated user back
+      });
+      if (affectedRows === 0) {
+        return null;  // User not found
+      }
+      return updatedUser[0];  // Return updated user
+    } catch (error) {
+      throw new Error("Error updating user details: " + error.message);
+    }
   }
+  
 
   // Delete a user by ID
   async delete(id) {
