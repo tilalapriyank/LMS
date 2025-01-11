@@ -23,6 +23,7 @@ import AddEditCoursePage from "../components/admin/dashboard/content/course/AddE
 import AddEditLessonPage from "../components/admin/dashboard/content/lesson/AddEditLessonPage";
 import AddEditQuizPage from "../components/admin/dashboard/content/quiz/AddEditQuizPage";
 import AddEditQuestionPage from "../components/admin/dashboard/content/question/AddEditQuestionPage";
+import EditUserPage from "../components/admin/dashboard/content/users/EditUserPage";
 
 const RoutesComponent = () => {
   const { role, isAuthenticated } = useContext(UserContext); // Get user role and authentication status
@@ -78,6 +79,7 @@ const RoutesComponent = () => {
             <Route path="taxonomy" element={<Taxonomy />} />
             <Route path="settings" element={<Setting />} />
             <Route path="users" element={<UserList />} />
+            <Route path="users/edit/:userId" element={<EditUserPage />} />
           </Route>
 
           <Route path="/course" element={<CoursesList />} />

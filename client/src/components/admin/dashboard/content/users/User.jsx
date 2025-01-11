@@ -80,14 +80,6 @@ const UserList = () => {
     <Box>
       <Toolbar sx={{ justifyContent: "space-between", marginBottom: 2 }}>
         <Typography variant="h4">User List</Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{ padding: "10px 20px" }}
-          onClick={() => navigate(`add/`)}
-        >
-          Add New User
-        </Button>
       </Toolbar>
 
       <Box sx={{ display: "flex", justifyContent: "right", marginBottom: 2 }}>

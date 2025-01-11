@@ -19,6 +19,7 @@ import lmsRoutes from "./routes/lmsRoutes.js";
 import tagRoutes from "./routes/tagRoutes.js";
 import quecategoryRoutes from "./routes/questionCategoryRoutes.js";
 import settingRoutes from "./routes/settingRoutes.js";
+import userMetaRoutes from "./routes/userMetaRoutes.js";
 import helmet from "helmet";
 import morgan from "morgan";
 
@@ -39,6 +40,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/usermeta", userMetaRoutes);
 app.use("/api/lessons", lessonRoutes);
 app.use("/api/quiz", quizRoutes);
 app.use("/api/questions", questionRoutes);
