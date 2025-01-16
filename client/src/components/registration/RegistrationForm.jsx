@@ -43,15 +43,6 @@ const RegistrationForm = () => {
     navigate('/dashboard'); // Redirect to your desired page
   };
 
-  const handleFacebookResponse = (response) => {
-    if (response.status === 'unknown') {
-      alert('Facebook login failed');
-    } else {
-      alert(`Facebook login successful: ${response.name}`);
-      navigate('/dashboard'); // Redirect to your desired page
-    }
-  };
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', p: 3, border: '1px solid #ccc', borderRadius: 2 }}>
       <Typography variant="h5" sx={{ mb: 2, textAlign: 'center' }}>

@@ -56,6 +56,7 @@ export const userDetails = async (id) => {
 
 export const updateUser = async (userId, user) => {
   try {
+    console.log('Updating user:', user);
     const userResponse = await fetch(`${API_URL}/users/${userId}`, {
       method: 'PUT',
       headers: {
