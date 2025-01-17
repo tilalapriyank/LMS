@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Title from "../../common/Title";
 import Content from "../../common/Content";
 import Curriculum from "./Curriculum";
@@ -28,6 +28,12 @@ const AddEditCoursePage = () => {
     taxonomy: { categories: [], tags: [] },
     video: [],
     materials: [],
+    additional: {
+      faq: [],
+      requirements: [],
+      targetAudience: [],
+      keyFeatures: [],
+    },
   };
 
   const [courseData, setCourseData] = useState(defaultCourseData);
@@ -45,6 +51,14 @@ const AddEditCoursePage = () => {
         materials: [],
         taxonomy: { categories: [], tags: [] },
         video: [],
+        additional: {
+          faq: [
+            { question: "What is React?", answer: "React is a JS library." },
+          ],
+          requirements: ["Basic JavaScript knowledge"],
+          targetAudience: ["Beginners in Web Development"],
+          keyFeatures: ["Interactive UI", "Fast rendering"],
+        },
       };
       setCourseData(fetchedCourseData);
     } else {
@@ -52,26 +66,33 @@ const AddEditCoursePage = () => {
     }
   }, [courseId]);
 
-  const handleCourseDataChange = (field, value) => {
-    if (field === "isActive" || field === "duration") {
-      setCourseData({
-        ...courseData,
-        settings: {
-          ...courseData.settings,
+  const handleCourseDataChange = useCallback(
+    (field, value) => {
+      if (field === "settings") {
+        setCourseData(prevState => ({
+          ...prevState,
+          settings: {
+            ...prevState.settings,
+            ...value,
+          },
+        }));
+      } else if (field === "additional") {
+        setCourseData(prevState => ({
+          ...prevState,
+          additional: {
+            ...prevState.additional,
+            ...value,
+          },
+        }));
+      } else {
+        setCourseData(prevState => ({
+          ...prevState,
           [field]: value,
-        },
-      });
-    } else {
-      setCourseData({
-        ...courseData,
-        [field]: value,
-      });
-    }
-  };
-
-  const handleChange = (name, value) => {
-    console.log(`${name} changed to ${value}`);
-  };
+        }));
+      }
+    },
+    []
+  );
 
   const handleSaveCourse = () => {
     console.log(courseData);
@@ -81,10 +102,10 @@ const AddEditCoursePage = () => {
   };
 
   const handleUploadMaterials = (materials) => {
-    setCourseData({
-      ...courseData,
+    setCourseData(prevState => ({
+      ...prevState,
       materials,
-    });
+    }));
   };
 
   return (
@@ -108,8 +129,17 @@ const AddEditCoursePage = () => {
             curriculum={courseData.curriculum}
             onChange={(value) => handleCourseDataChange("curriculum", value)}
           />
-          <Settings settings={courseSettings} onChange={handleChange} />
-          <AdditionalSections />
+          <Settings
+            settings={courseSettings}
+            onChange={(value) => handleCourseDataChange("settings", value)}
+          />
+          <AdditionalSections
+            faqItems={courseData.additional.faq}
+            requirements={courseData.additional.requirements}
+            targetAudience={courseData.additional.targetAudience}
+            keyFeatures={courseData.additional.keyFeatures}
+            onChange={(field, value) => handleCourseDataChange("additional", { [field]: value })}
+          />
         </Grid>
 
         <Grid item xs={12} md={4}>

@@ -25,8 +25,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { quizList } from "../../../../../api/quiz";
 import { lessonList } from "../../../../../api/lesson";
 
-const Curriculum = () => {
-  const [sections, setSections] = useState([]);
+const Curriculum = ({ curriculum, onChange }) => {
+  const [sections, setSections] = useState(curriculum || []);
   const [currentSectionIndex, setCurrentSectionIndex] = useState(null);
   const [isLessonModalOpen, setLessonModalOpen] = useState(false);
   const [isQuizModalOpen, setQuizModalOpen] = useState(false);
@@ -50,7 +50,9 @@ const Curriculum = () => {
   }, []);
 
   const handleAddSection = () => {
-    setSections([...sections, { title: "", description: "", items: [] }]);
+    const newSections = [...sections, { title: "", description: "", items: [] }];
+    setSections(newSections);
+    onChange(newSections);
   };
 
   const handleSectionChange = (index, field, value) => {
@@ -58,21 +60,28 @@ const Curriculum = () => {
       i === index ? { ...section, [field]: value } : section
     );
     setSections(updatedSections);
+    onChange(updatedSections);
   };
 
   const handleAddSelectedItems = (type) => {
+    console.log(selectedItems); // Check if selected items have the original ids
     const updatedSections = sections.map((section, i) =>
       i === currentSectionIndex
         ? {
             ...section,
             items: [
               ...section.items,
-              ...selectedItems.map((title) => ({ type, title })),
+              ...selectedItems.map((item) => ({
+                type,
+                id: item.id, // Use original id
+                title: item.name, // Use the name or title of the lesson/quiz
+              })),
             ],
           }
         : section
     );
     setSections(updatedSections);
+    onChange(updatedSections);
     closeAllModals();
   };
 
@@ -86,6 +95,7 @@ const Curriculum = () => {
         : section
     );
     setSections(updatedSections);
+    onChange(updatedSections);
   };
 
   const openModal = (index, modalType) => {
@@ -104,7 +114,9 @@ const Curriculum = () => {
 
   const handleCheckboxChange = (item) => {
     setSelectedItems((prev) =>
-      prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
+      prev.some((i) => i.id === item.id) // Check if the item already exists in the list
+        ? prev.filter((i) => i.id !== item.id) // Remove the item if it already exists
+        : [...prev, item] // Add the item if it's not already in the list
     );
   };
 
@@ -132,8 +144,8 @@ const Curriculum = () => {
             key={item.id}
             control={
               <Checkbox
-                checked={selectedItems.includes(item.name)}
-                onChange={() => handleCheckboxChange(item.name)}
+                checked={selectedItems.some((i) => i.id === item.id)}
+                onChange={() => handleCheckboxChange(item)}
               />
             }
             label={item.name}
@@ -244,7 +256,7 @@ const Curriculum = () => {
                     }}
                   >
                     <Typography variant="body2">
-                      {item.type.toUpperCase()}: {item.title || "Untitled"}
+                      {item.type.toUpperCase()}: {item.title || "Untitled"} (ID: {item.id})
                     </Typography>
                     <IconButton
                       color="error"
