@@ -7,7 +7,10 @@ import Image from "../../common/Image";
 import { Grid, Box, Typography, Button } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { courseSettings } from "../../../../../utils/courseSetting";
-import AdditionalSections from './AdditionalSections';
+import AdditionalSections from "./AdditionalSections";
+import UploadMaterial from "../../common/UploadMaterial";
+import Taxonomy from "./Taxonomy";
+import Video from "../../common/Video";
 
 const AddEditCoursePage = () => {
   const { courseId } = useParams();
@@ -16,12 +19,15 @@ const AddEditCoursePage = () => {
   const defaultCourseData = {
     title: "",
     content: "",
-    curriculum: "",
+    curriculum: [],
     settings: {
       isActive: false,
       duration: "",
     },
     image: null,
+    taxonomy: { categories: [], tags: [] },
+    video: [],
+    materials: [],
   };
 
   const [courseData, setCourseData] = useState(defaultCourseData);
@@ -33,9 +39,12 @@ const AddEditCoursePage = () => {
       const fetchedCourseData = {
         title: "Existing Course Title",
         content: "This is the existing course content.",
-        curriculum: "Curriculum details here...",
+        curriculum: [],
         settings: { isActive: true, duration: "3 months" },
         image: null,
+        materials: [],
+        taxonomy: { categories: [], tags: [] },
+        video: [],
       };
       setCourseData(fetchedCourseData);
     } else {
@@ -71,6 +80,13 @@ const AddEditCoursePage = () => {
     }
   };
 
+  const handleUploadMaterials = (materials) => {
+    setCourseData({
+      ...courseData,
+      materials,
+    });
+  };
+
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h5" sx={{ mb: 2 }}>
@@ -92,14 +108,26 @@ const AddEditCoursePage = () => {
             curriculum={courseData.curriculum}
             onChange={(value) => handleCourseDataChange("curriculum", value)}
           />
-            <Settings settings={courseSettings} onChange={handleChange} />
-            <AdditionalSections />
+          <Settings settings={courseSettings} onChange={handleChange} />
+          <AdditionalSections />
         </Grid>
 
         <Grid item xs={12} md={4}>
           <Image
             image={courseData.image}
             onChange={(file) => handleCourseDataChange("image", file)}
+          />
+          <UploadMaterial
+            uploadedFiles={courseData.materials}
+            onUpload={handleUploadMaterials}
+          />
+          <Taxonomy
+            taxonomy={courseData.taxonomy}
+            onChange={(value) => handleCourseDataChange("taxonomy", value)}
+          />
+          <Video
+            video={courseData.video}
+            onChange={(value) => handleCourseDataChange("video", value)}
           />
         </Grid>
       </Grid>

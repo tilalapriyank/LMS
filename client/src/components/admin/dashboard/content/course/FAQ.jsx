@@ -43,7 +43,6 @@ const FAQ = ({ faqItems, onAdd, onRemove }) => {
         }}
       />
       <CardContent>
-        {/* Add FAQ - Question and Answer Inputs */}
         <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
           <TextField
             fullWidth
@@ -69,7 +68,6 @@ const FAQ = ({ faqItems, onAdd, onRemove }) => {
           </Button>
         </Box>
 
-        {/* List of FAQ Entries */}
         <List dense>
           {faqItems.map((item, index) => (
             <ListItem

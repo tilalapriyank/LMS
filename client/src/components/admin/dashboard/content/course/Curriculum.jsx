@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -16,15 +16,14 @@ import {
   IconButton,
   Divider,
   Stack,
-  Backdrop,
   Fade,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import CloseIcon from '@mui/icons-material/Close';
-import { quizList } from '../../../../../api/quiz';
-import { lessonList } from '../../../../../api/lesson';
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import CloseIcon from "@mui/icons-material/Close";
+import { quizList } from "../../../../../api/quiz";
+import { lessonList } from "../../../../../api/lesson";
 
 const Curriculum = () => {
   const [sections, setSections] = useState([]);
@@ -43,7 +42,7 @@ const Curriculum = () => {
         setLessons(fetchedLessons || []);
         setQuizzes(fetchedQuizzes || []);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -51,7 +50,7 @@ const Curriculum = () => {
   }, []);
 
   const handleAddSection = () => {
-    setSections([...sections, { title: '', description: '', items: [] }]);
+    setSections([...sections, { title: "", description: "", items: [] }]);
   };
 
   const handleSectionChange = (index, field, value) => {
@@ -92,8 +91,8 @@ const Curriculum = () => {
   const openModal = (index, modalType) => {
     setCurrentSectionIndex(index);
     setSelectedItems([]);
-    if (modalType === 'lesson') setLessonModalOpen(true);
-    if (modalType === 'quiz') setQuizModalOpen(true);
+    if (modalType === "lesson") setLessonModalOpen(true);
+    if (modalType === "quiz") setQuizModalOpen(true);
   };
 
   const closeAllModals = () => {
@@ -113,21 +112,21 @@ const Curriculum = () => {
     <>
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
           paddingBottom: 2,
         }}
       >
         <Typography variant="h6">
-          {type === 'lesson' ? 'Select Lessons' : 'Select Quizzes'}
+          {type === "lesson" ? "Select Lessons" : "Select Quizzes"}
         </Typography>
         <IconButton onClick={closeAllModals}>
           <CloseIcon />
         </IconButton>
       </Box>
       <Divider />
-      <Box sx={{ padding: 2, maxHeight: '50vh', overflowY: 'auto' }}>
+      <Box sx={{ padding: 2, maxHeight: "50vh", overflowY: "auto" }}>
         {items.map((item) => (
           <FormControlLabel
             key={item.id}
@@ -149,24 +148,24 @@ const Curriculum = () => {
           color="primary"
           fullWidth
         >
-          Add Selected {type === 'lesson' ? 'Lessons' : 'Quizzes'}
+          Add Selected {type === "lesson" ? "Lessons" : "Quizzes"}
         </Button>
       </Box>
     </>
   );
 
   return (
-    <Card sx={{ bgcolor: '#ffffff', borderRadius: 2, boxShadow: 3, mb: 3 }}>
+    <Card sx={{ bgcolor: "#ffffff", borderRadius: 2, boxShadow: 3, mb: 3 }}>
       <CardHeader
         title="Curriculum"
         titleTypographyProps={{
-          variant: 'h6',
-          fontWeight: 'bold',
+          variant: "h6",
+          fontWeight: "bold",
         }}
         sx={{
-          backgroundColor: '#1976d2',
-          color: '#fff',
-          borderBottom: '1px solid #ddd',
+          backgroundColor: "#1976d2",
+          color: "#fff",
+          borderBottom: "1px solid #ddd",
         }}
       />
       <CardContent>
@@ -184,7 +183,7 @@ const Curriculum = () => {
             key={index}
             sx={{
               marginBottom: 2,
-              border: '1px solid #e0e0e0',
+              border: "1px solid #e0e0e0",
               boxShadow: 1,
             }}
           >
@@ -195,9 +194,9 @@ const Curriculum = () => {
                 size="small"
                 value={section.title}
                 onChange={(e) =>
-                  handleSectionChange(index, 'title', e.target.value)
+                  handleSectionChange(index, "title", e.target.value)
                 }
-                sx={{ width: '75%' }}
+                sx={{ width: "75%" }}
               />
             </AccordionSummary>
             <AccordionDetails>
@@ -206,7 +205,7 @@ const Curriculum = () => {
                 variant="outlined"
                 value={section.description}
                 onChange={(e) =>
-                  handleSectionChange(index, 'description', e.target.value)
+                  handleSectionChange(index, "description", e.target.value)
                 }
                 multiline
                 rows={3}
@@ -217,14 +216,14 @@ const Curriculum = () => {
                 <Button
                   variant="outlined"
                   color="secondary"
-                  onClick={() => openModal(index, 'lesson')}
+                  onClick={() => openModal(index, "lesson")}
                 >
                   Add Lesson
                 </Button>
                 <Button
                   variant="outlined"
                   color="secondary"
-                  onClick={() => openModal(index, 'quiz')}
+                  onClick={() => openModal(index, "quiz")}
                 >
                   Add Quiz
                 </Button>
@@ -240,12 +239,12 @@ const Curriculum = () => {
                     sx={{
                       marginBottom: 1,
                       padding: 1,
-                      border: '1px solid #f0f0f0',
+                      border: "1px solid #f0f0f0",
                       borderRadius: 1,
                     }}
                   >
                     <Typography variant="body2">
-                      {item.type.toUpperCase()}: {item.title || 'Untitled'}
+                      {item.type.toUpperCase()}: {item.title || "Untitled"}
                     </Typography>
                     <IconButton
                       color="error"
@@ -262,12 +261,10 @@ const Curriculum = () => {
         ))}
       </CardContent>
 
-      {/* Lesson Modal */}
       <Modal
         open={isLessonModalOpen}
         onClose={closeAllModals}
         closeAfterTransition
-        BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
@@ -275,26 +272,24 @@ const Curriculum = () => {
         <Fade in={isLessonModalOpen}>
           <Box
             sx={{
-              bgcolor: 'background.paper',
+              bgcolor: "background.paper",
               borderRadius: 2,
               boxShadow: 3,
               padding: 3,
-              margin: 'auto',
-              marginTop: '10%',
+              margin: "auto",
+              marginTop: "10%",
               maxWidth: 500,
             }}
           >
-            {renderModalContent('lesson', lessons)}
+            {renderModalContent("lesson", lessons)}
           </Box>
         </Fade>
       </Modal>
 
-      {/* Quiz Modal */}
       <Modal
         open={isQuizModalOpen}
         onClose={closeAllModals}
         closeAfterTransition
-        BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
@@ -302,16 +297,16 @@ const Curriculum = () => {
         <Fade in={isQuizModalOpen}>
           <Box
             sx={{
-              bgcolor: 'background.paper',
+              bgcolor: "background.paper",
               borderRadius: 2,
               boxShadow: 3,
               padding: 3,
-              margin: 'auto',
-              marginTop: '10%',
+              margin: "auto",
+              marginTop: "10%",
               maxWidth: 500,
             }}
           >
-            {renderModalContent('quiz', quizzes)}
+            {renderModalContent("quiz", quizzes)}
           </Box>
         </Fade>
       </Modal>
