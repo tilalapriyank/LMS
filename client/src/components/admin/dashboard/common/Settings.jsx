@@ -10,6 +10,7 @@ import {
   Card,
   CardHeader,
   CardContent,
+  Grid,
 } from "@mui/material";
 
 const Settings = ({ settings, onChange }) => {
@@ -34,86 +35,84 @@ const Settings = ({ settings, onChange }) => {
           color: "#fff",
         }}
       />
-      <CardContent style={{ padding: "16px" }}>
-        {settings.map((setting, index) => (
-          <div key={index} style={{ marginBottom: "16px", maxWidth: "300px" }}>
-            <Typography
-              variant="body1"
-              color="textPrimary"
-              style={{ fontWeight: "bold", marginBottom: "4px" }}
-            >
-              {setting.title}
-            </Typography>
-            {setting.description && (
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                style={{ marginBottom: "8px" }}
-              >
-                {setting.description}
-              </Typography>
-            )}
-
-            {setting.type === "checkbox" && (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={setting.value}
-                    onChange={(e) => onChange(setting.id, e.target.checked)}
-                    color="primary"
-                  />
-                }
-                label={setting.title}
-                style={{ marginBottom: "4px" }}
-              />
-            )}
-
-            {setting.type === "text" && (
-              <TextField
-                value={setting.value}
-                onChange={(e) => onChange(setting.id, e.target.value)}
-                fullWidth={false}
-                style={{ width: "100%" }}
-                margin="dense"
-                variant="outlined"
-                size="small"
-              />
-            )}
-
-            {setting.type === "number" && (
-              <TextField
-                type="number"
-                value={setting.value}
-                onChange={(e) => onChange(setting.id, e.target.value)}
-                fullWidth={false}
-                style={{ width: "100%" }}
-                margin="dense"
-                variant="outlined"
-                size="small"
-              />
-            )}
-
-            {setting.type === "select" && (
-              <FormControl
-                style={{ width: "100%" }}
-                margin="dense"
-                variant="outlined"
-                size="small"
-              >
-                <Select
-                  value={setting.value}
-                  onChange={(e) => onChange(setting.id, e.target.value)}
+      <CardContent>
+        <Grid container spacing={3}>
+          {settings.map((setting, index) => (
+            <Grid item xs={12} md={4} key={index}>
+              <div style={{ marginBottom: "20px", maxWidth: "400px" }}>
+                <Typography
+                  variant="body1"
+                  color="textPrimary"
+                  style={{ fontWeight: "bold", marginBottom: "4px" }}
                 >
-                  {setting.options.map((option, idx) => (
-                    <MenuItem key={idx} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
-          </div>
-        ))}
+                  {setting.title}
+                </Typography>
+                {setting.description && (
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    style={{ marginBottom: "8px" }}
+                  >
+                    {setting.description}
+                  </Typography>
+                )}
+
+                {setting.type === "checkbox" && (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={setting.value}
+                        onChange={(e) =>
+                          onChange(setting.id, e.target.checked)
+                        }
+                        color="primary"
+                      />
+                    }
+                    label={setting.title}
+                  />
+                )}
+
+                {setting.type === "text" && (
+                  <TextField
+                    onChange={(e) => onChange(setting.id, e.target.value)}
+                    fullWidth
+                    margin="dense"
+                    variant="outlined"
+                    size="small"
+                    placeholder={setting.placeholder || "Enter text"}
+                  />
+                )}
+
+                {setting.type === "number" && (
+                  <TextField
+                    type="number"
+                    onChange={(e) => onChange(setting.id, e.target.value)}
+                    fullWidth
+                    margin="dense"
+                    variant="outlined"
+                    size="small"
+                    placeholder={setting.placeholder || "Enter number"}
+                  />
+                )}
+
+                {setting.type === "select" && (
+                  <FormControl fullWidth margin="dense" variant="outlined" size="small">
+                    <Select
+                      onChange={(e) => onChange(setting.id, e.target.value)}
+                      displayEmpty
+                    >
+                      {setting.options.map((option, idx) => (
+                        <MenuItem key={idx} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                )}
+              </div>
+            </Grid>
+          ))}
+        </Grid>
       </CardContent>
     </Card>
   );

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../../api/registrationUser';
-import { GoogleLogin } from '@react-oauth/google';
 
 const RegistrationForm = () => {
   const [name, setUsername] = useState('');
@@ -34,13 +33,6 @@ const RegistrationForm = () => {
       console.error('Error:', error);
       alert('Error occurred while registering');
     }
-  };
-
-  const handleGoogleSuccess = (response) => {
-    const { credential } = response;
-    // Process the Google credential, e.g., send it to your backend for registration
-    alert(`Google login successful: ${credential}`);
-    navigate('/dashboard'); // Redirect to your desired page
   };
 
   return (
@@ -94,22 +86,7 @@ const RegistrationForm = () => {
 
       <Button variant="contained" color="primary" fullWidth onClick={handleSubmit} sx={{ mt: 2 }}>
         Register
-      </Button>
-
-      {/* Google Login */}
-      <GoogleLogin
-        onSuccess={handleGoogleSuccess}
-        onError={(error) => console.error('Google login failed', error)}
-        useOneTap
-        shape="rectangular"
-        width="100%"
-        theme="outline"
-        text="signup_with"
-        size="large"
-        sx={{ mt: 2 }}
-      />
-
-   
+      </Button>  
     </Box>
   );
 };
