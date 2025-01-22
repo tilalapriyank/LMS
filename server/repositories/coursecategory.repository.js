@@ -28,7 +28,10 @@ class CourseCategoryRepository {
 
   // Update a course-category association
   async update(courseId, categoryId, updateData) {
-    const courseCategory = await this.findByCourseAndCategory(courseId, categoryId);
+    const courseCategory = await this.findByCourseAndCategory(
+      courseId,
+      categoryId
+    );
     if (courseCategory) {
       return courseCategory.update(updateData);
     }
@@ -37,7 +40,10 @@ class CourseCategoryRepository {
 
   // Delete a course-category association
   async delete(courseId, categoryId) {
-    const courseCategory = await this.findByCourseAndCategory(courseId, categoryId);
+    const courseCategory = await this.findByCourseAndCategory(
+      courseId,
+      categoryId
+    );
     if (courseCategory) {
       return courseCategory.destroy();
     }
@@ -58,6 +64,18 @@ class CourseCategoryRepository {
   async countByCategory(categoryId) {
     return CourseCategory.count({ where: { categoryId } });
   }
+
+  async deleteByCourseId(courseId) {
+    const deletedCount = await CourseCategory.destroy({
+      where: { courseId },
+    });
+
+    return {
+      message: `${deletedCount} course-category associations deleted successfully`,
+    };
+  }
+  
+
 }
 
 export default new CourseCategoryRepository();

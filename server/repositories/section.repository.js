@@ -8,7 +8,7 @@ class SectionRepository {
 
   // Get all sections by courseId
   async getSectionsByCourseId(courseId) {
-    return Section.findAll({ where: { courseId }, order: [['order', 'ASC']] });
+    return Section.findAll({ where: { courseId }, order: [["order", "ASC"]] });
   }
 
   // Get a specific section by id
@@ -44,6 +44,18 @@ class SectionRepository {
       return { message: "Section deleted successfully" };
     }
     return null;
+  }
+
+  // Delete all sections by courseId
+  async deleteSectionsByCourseId(courseId) {
+    const deletedCount = await Section.destroy({
+      where: { courseId },
+    });
+
+    return { message: `${deletedCount} sections deleted successfully` };
+  }
+  async findByCourseId(courseId) {
+    return Section.findAll({ where: { courseId } });
   }
 }
 

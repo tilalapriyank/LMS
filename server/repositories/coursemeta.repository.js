@@ -61,6 +61,12 @@ class CourseMetaRepository {
       limit: pageSize,
     });
   }
+
+  async updateByCourseIdAndMetaKey(courseId, metaKey, updateData) {
+    return CourseMeta.update(updateData, {
+      where: { courseId, metaKey },
+    });
+  }
 }
 
 export default new CourseMetaRepository();

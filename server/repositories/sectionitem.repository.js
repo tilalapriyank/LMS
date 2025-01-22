@@ -1,25 +1,23 @@
 import SectionItem from "../models/SectionItem.js";
+import sectionRepository from "./section.repository.js";
+import { Op } from "sequelize";
 
 class SectionItemRepository {
-  // Create a new section item
   async createSectionItem(data) {
-    return SectionItem.create(data);
+    return SectionItem.bulkCreate(data);
   }
 
-  // Get all items in a section
   async getItemsBySectionId(sectionId) {
     return SectionItem.findAll({
       where: { sectionId },
-      order: [['itemOrder', 'ASC']],
+      order: [["itemOrder", "ASC"]],
     });
   }
 
-  // Get specific item by id
   async getItemById(id) {
     return SectionItem.findByPk(id);
   }
 
-  // Update item order in the section
   async updateItemOrder(id, newOrder) {
     const sectionItem = await SectionItem.findByPk(id);
     if (sectionItem) {
@@ -30,7 +28,6 @@ class SectionItemRepository {
     return null;
   }
 
-  // Update section item details
   async updateSectionItem(id, data) {
     const sectionItem = await SectionItem.findByPk(id);
     if (sectionItem) {
@@ -39,7 +36,6 @@ class SectionItemRepository {
     return null;
   }
 
-  // Delete a section item
   async deleteSectionItem(id) {
     const sectionItem = await SectionItem.findByPk(id);
     if (sectionItem) {
@@ -47,6 +43,26 @@ class SectionItemRepository {
       return { message: "Section item deleted successfully" };
     }
     return null;
+  }
+
+  async findByCourseId(courseId) {
+    try {
+      const sections = await sectionRepository.findByCourseId(courseId);
+      const sectionIds = sections.map((section) => section.id);
+
+      const sectionItems = await SectionItem.findAll({
+        where: {
+          sectionId: {
+            [Op.in]: sectionIds, 
+          },
+        },
+      });
+
+      return sectionItems; 
+    } catch (error) {
+      console.error(error);
+      throw new Error("Failed to fetch section items");
+    }
   }
 }
 

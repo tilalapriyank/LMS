@@ -23,7 +23,7 @@ const CourseMeta = sequelize.define(
       allowNull: false,
     },
     metaValue: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: true,
     },
   },

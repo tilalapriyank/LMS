@@ -45,6 +45,7 @@ const ImagePreview = styled("div")(({ theme }) => ({
   },
 }));
 
+
 const Image = ({ image, onChange, onClear }) => (
   <Card
     sx={{
@@ -78,13 +79,27 @@ const Image = ({ image, onChange, onClear }) => (
             type="file"
             accept="image/*"
             hidden
-            onChange={(e) => onChange(e.target.files[0])}
+            // onChange={(e) => onChange(e.target.files[0])}
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                const fileDetails = {
+                  name: file.name,
+                  size: file.size,
+                  type: file.type,
+                  lastModified: file.lastModified,
+                  lastModifiedDate: file.lastModifiedDate,
+                  preview: URL.createObjectURL(file),
+                };
+                onChange(fileDetails); 
+              }
+            }}
           />
         </InputButton>
 
-        {image && (
+        {image && image.preview && (
           <ImagePreview>
-            <img src={URL.createObjectURL(image)} alt="Preview" />
+            <img src={image.preview} alt="Preview" />
             <Button onClick={onClear} sx={{ padding: '6px' }}>
               X
             </Button>

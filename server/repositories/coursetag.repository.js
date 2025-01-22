@@ -58,6 +58,15 @@ class CourseTagRepository {
   async countByTag(tagId) {
     return CourseTag.count({ where: { tagId } });
   }
+  async deleteByCourseId(courseId) {
+    const deletedCount = await CourseTag.destroy({
+      where: { courseId },
+    });
+
+    return {
+      message: `${deletedCount} course-tag associations deleted successfully`,
+    };
+  }
 }
 
 export default new CourseTagRepository();
