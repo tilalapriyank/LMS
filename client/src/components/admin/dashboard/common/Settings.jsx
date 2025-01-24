@@ -62,9 +62,7 @@ const Settings = ({ settings, onChange }) => {
                     control={
                       <Checkbox
                         checked={setting.value}
-                        onChange={(e) =>
-                          onChange(setting.id, e.target.checked)
-                        }
+                        onChange={(e) => onChange(setting.id, e.target.checked)}
                         color="primary"
                       />
                     }
@@ -95,8 +93,26 @@ const Settings = ({ settings, onChange }) => {
                   />
                 )}
 
+                {setting.type === "textarea" && (
+                  <TextField
+                    multiline
+                    rows={4}
+                    onChange={(e) => onChange(setting.id, e.target.value)}
+                    fullWidth
+                    margin="dense"
+                    variant="outlined"
+                    size="small"
+                    placeholder={setting.placeholder || "Enter text"}
+                  />
+                )}
+
                 {setting.type === "select" && (
-                  <FormControl fullWidth margin="dense" variant="outlined" size="small">
+                  <FormControl
+                    fullWidth
+                    margin="dense"
+                    variant="outlined"
+                    size="small"
+                  >
                     <Select
                       onChange={(e) => onChange(setting.id, e.target.value)}
                       displayEmpty
