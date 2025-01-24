@@ -58,7 +58,18 @@ class CourseTagRepository {
   async countByTag(tagId) {
     return CourseTag.count({ where: { tagId } });
   }
+  
   async deleteByCourseId(courseId) {
+    const existingAssociations = await CourseTag.findAll({
+      where: { courseId },
+    });
+
+    if (existingAssociations.length === 0) {
+      return {
+        message: "No course-tag associations found for the provided course ID",
+      };
+    }
+
     const deletedCount = await CourseTag.destroy({
       where: { courseId },
     });

@@ -17,7 +17,11 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { categoryList, tagList, questionCategoryList } from "../../../../../api/taxonomy"; // Your API calls for categories, tags, and question categories
+import {
+  categoryList,
+  tagList,
+  questionCategoryList,
+} from "../../../../../api/taxonomy";
 import { useNavigate } from "react-router-dom";
 
 const Taxonomy = () => {
@@ -35,10 +39,10 @@ const Taxonomy = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const categoryResponse = await categoryList(); 
+        const categoryResponse = await categoryList();
         setCategories(categoryResponse);
 
-        const tagResponse = await tagList(); 
+        const tagResponse = await tagList();
         setTags(tagResponse);
 
         const questionCategoryResponse = await questionCategoryList();
@@ -93,23 +97,68 @@ const Taxonomy = () => {
 
   return (
     <Box>
-      <Toolbar sx={{ justifyContent: "space-between", marginBottom: 2 }}>
-        <Typography variant="h4">Categories and Tags</Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{ padding: "10px 20px" }}
-          onClick={() => navigate(`add/`)}
-        >
-          Add New
-        </Button>
+      <Toolbar sx={{ marginBottom: 2 }}>
+        <Typography variant="h4">Taxonomy</Typography>
       </Toolbar>
-
-      <Tabs value={activeTab} onChange={handleTabChange} sx={{ marginBottom: 2 }}>
-        <Tab label="Categories" value="categories" />
-        <Tab label="Tags" value="tags" />
-        <Tab label="Question Categories" value="questionCategories" />
-      </Tabs>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: 2,
+        }}
+      >
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          sx={{ marginBottom: 2 }}
+        >
+          <Tab label="Categories" value="categories" />
+          <Tab label="Tags" value="tags" />
+          <Tab label="Question Categories" value="questionCategories" />
+        </Tabs>
+        {activeTab === "categories" && (
+          <Box
+            sx={{ display: "flex", justifyContent: "right", marginBottom: 2 }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ padding: "10px 20px" }}
+              onClick={() => navigate(`add/category`)}
+            >
+              Add New Category
+            </Button>
+          </Box>
+        )}
+        {activeTab === "tags" && (
+          <Box
+            sx={{ display: "flex", justifyContent: "right", marginBottom: 2 }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ padding: "10px 20px" }}
+              onClick={() => navigate(`add/tag`)}
+            >
+              Add New Tag
+            </Button>
+          </Box>
+        )}
+        {activeTab === "questionCategories" && (
+          <Box
+            sx={{ display: "flex", justifyContent: "right", marginBottom: 2 }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ padding: "10px 20px" }}
+              onClick={() => navigate(`add/question-category`)}
+            >
+              Add New Question Category
+            </Button>
+          </Box>
+        )}
+      </Box>
 
       <Box sx={{ display: "flex", justifyContent: "right", marginBottom: 2 }}>
         <TextField
@@ -157,13 +206,15 @@ const Taxonomy = () => {
               paginatedData(categories).map((category) => (
                 <TableRow key={category.id}>
                   <TableCell>{category.name}</TableCell>
-                  <TableCell>{category.description || "No Description"}</TableCell>
+                  <TableCell>
+                    {category.description || "No Description"}
+                  </TableCell>
                   <TableCell>
                     <Button
                       variant="outlined"
                       color="primary"
                       sx={{ marginRight: 1 }}
-                      onClick={() => navigate(`edit/${category.id}`)}
+                      onClick={() => navigate(`edit/category/${category.id}`)}
                     >
                       Edit
                     </Button>
@@ -184,7 +235,7 @@ const Taxonomy = () => {
                       variant="outlined"
                       color="primary"
                       sx={{ marginRight: 1 }}
-                      onClick={() => navigate(`edit/${tag.id}`)}
+                      onClick={() => navigate(`edit/tag/${tag.id}`)}
                     >
                       Edit
                     </Button>
@@ -199,13 +250,17 @@ const Taxonomy = () => {
               paginatedData(questionCategories).map((qCategory) => (
                 <TableRow key={qCategory.id}>
                   <TableCell>{qCategory.name}</TableCell>
-                  <TableCell>{qCategory.description || "No Description"}</TableCell>
+                  <TableCell>
+                    {qCategory.description || "No Description"}
+                  </TableCell>
                   <TableCell>
                     <Button
                       variant="outlined"
                       color="primary"
                       sx={{ marginRight: 1 }}
-                      onClick={() => navigate(`edit/${qCategory.id}`)}
+                      onClick={() =>
+                        navigate(`edit/question-category/${qCategory.id}`)
+                      }
                     >
                       Edit
                     </Button>

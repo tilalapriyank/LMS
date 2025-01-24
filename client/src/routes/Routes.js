@@ -17,6 +17,7 @@ import { Box } from "@mui/material";
 import Quiz from "../components/admin/dashboard/content/quiz/Quiz";
 import Question from "../components/admin/dashboard/content/question/Question";
 import Taxonomy from "../components/admin/dashboard/content/taxonomy/Taxonomy";
+import AddEditTaxonomy  from "../components/admin/dashboard/content/taxonomy/AddEditTaxonomy ";
 import UserList from "../components/admin/dashboard/content/users/User";
 import AddEditCoursePage from "../components/admin/dashboard/content/course/AddEditCoursePage";
 import AddEditLessonPage from "../components/admin/dashboard/content/lesson/AddEditLessonPage";
@@ -76,6 +77,8 @@ const RoutesComponent = () => {
             <Route path="quiz" element={<Quiz />} />
             <Route path="question" element={<Question />} />
             <Route path="taxonomy" element={<Taxonomy />} />
+            <Route path="taxonomy/add/:type" element={<AddEditTaxonomy  />} />
+            <Route path="taxonomy/edit/:type/:id" element={<AddEditTaxonomy  />} />
             <Route path="settings" element={<Setting />} />
             <Route path="users" element={<UserList />} />
             <Route path="users/edit/:userId" element={<EditUserPage />} />

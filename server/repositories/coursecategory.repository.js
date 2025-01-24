@@ -66,6 +66,17 @@ class CourseCategoryRepository {
   }
 
   async deleteByCourseId(courseId) {
+    const existingAssociations = await CourseCategory.findAll({
+      where: { courseId },
+    });
+
+    if (existingAssociations.length === 0) {
+      return {
+        message:
+          "No course-category associations found for the provided course ID",
+      };
+    }
+
     const deletedCount = await CourseCategory.destroy({
       where: { courseId },
     });
@@ -74,8 +85,6 @@ class CourseCategoryRepository {
       message: `${deletedCount} course-category associations deleted successfully`,
     };
   }
-  
-
 }
 
 export default new CourseCategoryRepository();

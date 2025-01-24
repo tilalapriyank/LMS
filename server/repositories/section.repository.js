@@ -46,14 +46,22 @@ class SectionRepository {
     return null;
   }
 
-  // Delete all sections by courseId
   async deleteSectionsByCourseId(courseId) {
+    const existingSections = await Section.findAll({
+      where: { courseId },
+    });
+
+    if (existingSections.length === 0) {
+      return { message: "No sections found for the provided course ID" };
+    }
+
     const deletedCount = await Section.destroy({
       where: { courseId },
     });
 
     return { message: `${deletedCount} sections deleted successfully` };
   }
+
   async findByCourseId(courseId) {
     return Section.findAll({ where: { courseId } });
   }
