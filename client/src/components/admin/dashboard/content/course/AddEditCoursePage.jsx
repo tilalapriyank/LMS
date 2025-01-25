@@ -224,7 +224,7 @@ const AddEditCoursePage = () => {
         <Button
           variant="contained"
           color="primary"
-          sx={{ mt: 3, ml: 2, width: 300 }}
+          sx={{ mt: 3, width: 300 }}
           onClick={() => handleSaveCourse("published")}
         >
           {isEditMode ? "Update" : "Publish"}

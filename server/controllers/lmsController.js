@@ -380,6 +380,21 @@ class LMSController {
       });
     }
   }
+
+  async createQuestion(req,res){
+    try {
+      const {
+        title,
+        content,
+        settings,
+        taxonomy,
+        userId,
+      } = req.body;
+    } catch (error) {
+      console.error(error);
+      
+    }
+  }
 }
 
 export default new LMSController();

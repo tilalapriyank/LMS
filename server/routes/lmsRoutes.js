@@ -12,5 +12,7 @@ router.get("/quiz-name/:questionId", LMSController.getQuizNameByQid);
 router.post("/create-course", LMSController.createCourse);
 router.post("/edit-course/:id", LMSController.editCourse);
 router.get("/course-data/:id", LMSController.getCourseData);
+router.post("/create-question", LMSController.createQuestion);
+
 
 export default router;

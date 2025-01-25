@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import {
   Grid,
   Box,
@@ -15,12 +15,15 @@ import Options from "./Options";
 import { questionSettings } from "../../../../../utils/questionSetting";
 import { useParams, useNavigate } from "react-router-dom";
 import QuestionCategory from "./QuestionCategory ";
+import { UserContext } from "../../../../../context/UserContext";
 
 const AddEditQuestionPage = () => {
   const { questionId } = useParams();
   const navigate = useNavigate();
+  const { userId } = useContext(UserContext);
 
   const defaultQuestionData = {
+    userId: userId,
     title: "",
     content: "",
     options: {
@@ -97,12 +100,12 @@ const AddEditQuestionPage = () => {
       errors.settings = "All settings must be filled.";
     }
 
-    if (!questionData.questioncategory.length)
+    if (!questionData.questioncategory)
       errors.categories = "Category is required.";
     return errors;
   };
 
-  const handleSaveQuestion = () => {
+  const handleSaveQuestion = (status) => {
     const errors = validateFields();
     console.log(errors);
     if (Object.keys(errors).length > 0) {
@@ -110,7 +113,7 @@ const AddEditQuestionPage = () => {
       return;
     }
     const mode = isEditMode ? "edit" : "create";
-    const updatedQuestionData = { ...questionData };
+    const updatedQuestionData = { ...questionData, status };
     console.log(mode, updatedQuestionData);
     navigate("/dashboard/question");
   };
@@ -185,11 +188,21 @@ const AddEditQuestionPage = () => {
       <Button
         variant="contained"
         color="primary"
-        sx={{ mt: 2 }}
-        onClick={handleSaveQuestion}
+        sx={{ mt: 3, width: 300 }}
+        onClick={() => handleSaveQuestion("published")}
       >
-        {isEditMode ? "Update" : "Add Question"}
+        {isEditMode ? "Update" : "Publish"}
       </Button>
+      {!isEditMode && (
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ mt: 3, ml: 2, width: 300 }}
+          onClick={() => handleSaveQuestion("draft")}
+        >
+          Draft
+        </Button>
+      )}
     </Box>
   );
 };
