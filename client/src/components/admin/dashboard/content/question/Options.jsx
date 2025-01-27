@@ -16,16 +16,13 @@ import {
   CardContent,
 } from "@mui/material";
 
-const Options = ({ options: initialOptions, onChange }) => {
-  const [type, setType] = useState(initialOptions?.options?.type || "");
-  const [options, setOptions] = useState(
-    initialOptions?.options?.options || []
-  );
+const Options = ({ optionsdata, onChange }) => {
+  const [type, setType] = useState(optionsdata.type || "");
+  const [options, setOptions] = useState(optionsdata.options || []);
+  const [shortAnswer, setShortAnswer] = useState(optionsdata.shortAnswer || "");
 
-  const [shortAnswer, setShortAnswer] = useState("");
-
-  // Notify parent on data change
   useEffect(() => {
+    // console.log(optionsdata);
     if (onChange) {
       if (type === "short-answer") {
         onChange({ type, shortAnswer });
@@ -38,8 +35,8 @@ const Options = ({ options: initialOptions, onChange }) => {
   const handleTypeChange = (e) => {
     const newType = e.target.value;
     setType(newType);
-    setOptions([{ value: "", correct: false }]); // Reset options for most types
-    setShortAnswer(""); // Reset short answer field
+    setOptions([{ value: "", correct: false }]);
+    setShortAnswer("");
 
     if (newType === "true-false") {
       setOptions([

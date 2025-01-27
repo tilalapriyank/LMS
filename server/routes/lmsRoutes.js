@@ -13,6 +13,8 @@ router.post("/create-course", LMSController.createCourse);
 router.post("/edit-course/:id", LMSController.editCourse);
 router.get("/course-data/:id", LMSController.getCourseData);
 router.post("/create-question", LMSController.createQuestion);
+router.get("/question-data/:id", LMSController.getQuestionData);
+
 
 
 export default router;

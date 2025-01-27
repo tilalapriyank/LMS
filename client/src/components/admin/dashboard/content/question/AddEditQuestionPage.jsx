@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useState, useEffect, useCallback, useContext, useRef } from "react";
 import {
   Grid,
   Box,
@@ -43,42 +43,40 @@ const AddEditQuestionPage = () => {
     questioncategory: [],
   };
 
-  const [questionData, setQuestionData] = useState(defaultQuestionData);
+  const [questionData, setQuestionData] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  const isMounted = useRef(true);
 
   useEffect(() => {
-    if (questionId) {
-      setIsEditMode(true);
-      const fetchedQuestionData = {
-        title: "",
-        options: {
-          type: "true-false",
-          options: [
-            {
-              correct: true,
-              value: "True",
-            },
-            {
-              correct: false,
-              value: "False",
-            },
-          ],
-        },
-        settings: {},
-        questioncategory: [],
-      };
-      setQuestionData(fetchedQuestionData);
-    } else {
-      setIsEditMode(false);
-    }
-  }, [questionId]);
+    const fetchQuestionData = async () => {
+      if (questionId) {
+        try {
+          setIsEditMode(true);
+          const fetchedQuestionData = await questionDataDetails(questionId);
+          if (fetchedQuestionData && isMounted.current) {
+            setQuestionData(fetchedQuestionData);
+          }
+        } catch (error) {
+          console.error("Error fetching question data:", error);
+        }
+      } else {
+        setIsEditMode(false);
+        setQuestionData([]); 
+      }
+    };
 
+    fetchQuestionData();
+
+    return () => {
+      isMounted.current = false;
+    };
+  }, [questionId]);
+console.log(questionData);
   const handleQuestionDataChange = useCallback((field, value) => {
     setQuestionData((prevState) => ({
       ...prevState,
-      [field]:
-        field === "settings" ? { ...prevState.settings, ...value } : value,
+      [field]: field === "settings" ? { ...prevState.settings, ...value } : value,
     }));
     setValidationErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
   }, []);
@@ -88,7 +86,6 @@ const AddEditQuestionPage = () => {
     if (!questionData.title) errors.title = "Title is required.";
     if (!questionData.options.type)
       errors.options = "At least one option is required.";
-
     if (!Object.keys(questionData.settings).length)
       errors.settings = "Settings are required.";
     if (
@@ -97,7 +94,6 @@ const AddEditQuestionPage = () => {
     ) {
       errors.settings = "All settings must be filled.";
     }
-
     if (!questionData.questioncategory)
       errors.categories = "Category is required.";
     return errors;
@@ -113,6 +109,7 @@ const AddEditQuestionPage = () => {
       setValidationErrors(errors);
       return;
     }
+
     try {
       const id = isEditMode ? questionId : null;
       const updatedQuestionData = { ...questionData, status };
@@ -176,7 +173,7 @@ const AddEditQuestionPage = () => {
           />
 
           <Options
-            options={questionData.options}
+            optionsdata={questionData.options}
             onChange={(value) => handleQuestionDataChange("options", value)}
           />
         </Grid>
@@ -195,9 +192,11 @@ const AddEditQuestionPage = () => {
         color="primary"
         sx={{ mt: 3, width: 300 }}
         onClick={() => handleSaveQuestion("published")}
+        disabled={Object.keys(validationErrors).length > 0}
       >
         {isEditMode ? "Update" : "Publish"}
       </Button>
+
       {!isEditMode && (
         <Button
           variant="contained"

@@ -95,7 +95,7 @@ const Question = () => {
 
   const getquizName = (itemId) => {
     const quiz = quizs.find((cat) => cat.itemId === itemId);
-    return quiz ? quiz.quiz : "-";
+    return Array.isArray(quiz.quiz) && quiz.quiz.length > 0 ? quiz.quiz : "Not yet assign";
   };
 
   const filteredQuestions = questions

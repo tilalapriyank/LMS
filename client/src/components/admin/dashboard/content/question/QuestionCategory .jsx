@@ -19,14 +19,13 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { questionCategoryList } from "../../../../../api/taxonomy";
 
-const QuestionCategory = ({ questionCategory, onChange }) => {
+const QuestionCategory = ({ questioncategory, onChange }) => {
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState(
-    questionCategory || []
+    questioncategory.categories || []
   );
   const [openModal, setOpenModal] = useState(null);
   const [tempSelected, setTempSelected] = useState([]);
-
   useEffect(() => {
     const fetchTaxonomyData = async () => {
       try {
@@ -72,7 +71,7 @@ const QuestionCategory = ({ questionCategory, onChange }) => {
         {categories.length > 0 ? (
           categories.map((item) => (
             <ListItem
-              key={item.id || item.name} 
+              key={item.id || item.name}
               button
               onClick={() => handleToggleSelection(item)}
             >
@@ -112,11 +111,7 @@ const QuestionCategory = ({ questionCategory, onChange }) => {
       />
       <CardContent>
         <Stack direction="row" spacing={2} marginBottom={2}>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleOpenModal}
-          >
+          <Button variant="outlined" color="primary" onClick={handleOpenModal}>
             Add Question Category
           </Button>
         </Stack>
@@ -127,20 +122,25 @@ const QuestionCategory = ({ questionCategory, onChange }) => {
           </Typography>
           {selectedCategories.length > 0 ? (
             <Stack direction="row" spacing={1} flexWrap="wrap">
-              {selectedCategories.map((category) => (
-                <Chip
-                  key={category.id || category.name}
-                  label={category.name}
-                  onDelete={() =>
-                    setSelectedCategories(
-                      selectedCategories.filter((c) => c !== category)
-                    )
-                  }
-                  sx={{
-                    marginBottom: "8px !important",
-                  }}
-                />
-              ))}
+              {selectedCategories.map((categoryId) => {
+                const category = categories.find(
+                  (cat) => cat.id === categoryId
+                );
+                return (
+                  <Chip
+                    key={categoryId}
+                    label={category?.name || "Unknown"}
+                    onDelete={() =>
+                      setSelectedCategories(
+                        selectedCategories.filter((id) => id !== categoryId)
+                      )
+                    }
+                    sx={{
+                      marginBottom: "8px !important",
+                    }}
+                  />
+                );
+              })}
             </Stack>
           ) : (
             <Typography variant="body2" color="text.secondary">

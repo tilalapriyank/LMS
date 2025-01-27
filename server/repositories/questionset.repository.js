@@ -25,6 +25,10 @@ class QuestionSetRepository {
     }
     return null;
   }
+
+  async findCategoriesByQuestion(questionId) {
+    return QuestionSet.findAll({ where: { questionId } });
+  }
 }
 
 export default new QuestionSetRepository();

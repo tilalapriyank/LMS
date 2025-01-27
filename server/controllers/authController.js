@@ -2,7 +2,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
-// Register a new user
 const registerUser = async (req, res) => {
   const { name, email, password, role } = req.body;
 
@@ -33,7 +32,6 @@ const registerUser = async (req, res) => {
   }
 };
 
-// Login an existing user
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -51,7 +49,7 @@ const loginUser = async (req, res) => {
     const token = jwt.sign(
       { userId: user.id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "9h" }
     );
     
     res.status(200).json({

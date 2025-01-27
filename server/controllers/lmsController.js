@@ -454,6 +454,77 @@ class LMSController {
         .json({ message: "Error creating question", error: error.message });
     }
   }
+
+  async getQuestionData(req, res) {
+    try {
+      const { id } = req.params;
+
+      // Validate the question ID
+      if (!id) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid question ID.",
+        });
+      }
+
+      // Fetch question and related data in parallel
+      const [question, metaData, categories, options] = await Promise.all([
+        questionRespository.findById(id),
+        questionmetaRepository.findByQuestionId(id),
+        questionsetRepository.findCategoriesByQuestion(id),
+        questionanswerRepository.getAnswersByQuestionId(id),
+      ]);
+
+      // Check if question exists
+      if (!question) {
+        return res.status(404).json({
+          success: false,
+          message: "Question not found.",
+        });
+      }
+
+      // Process options
+      const option =
+        question.type === "short-answer"
+          ? options.map((option) => option.value)
+          : options.map((option) => ({
+              value: option.value,
+              correct: option.isCorrect,
+            }));
+
+      // Construct the response
+      const questionDetails = {
+        title: question.name,
+        status: question.status,
+        author: question.author,
+        settings: metaData
+          ? JSON.parse(
+              metaData.find((item) => item.metaKey === "settings")?.metaValue ||
+                "{}"
+            )
+          : null,
+          questioncategory: {
+            categories: categories.map((category) => category.categoryId),
+          },
+        options: {
+          type: question.type,
+          options: option,
+        },
+      };
+
+      return res.status(200).json({
+        success: true,
+        data: questionDetails,
+      });
+    } catch (error) {
+      console.error("Error fetching question data:", error);
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while fetching question data.",
+        error: error.message,
+      });
+    }
+  }
 }
 
 export default new LMSController();
