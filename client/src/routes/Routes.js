@@ -71,11 +71,11 @@ const RoutesComponent = () => {
             <Route path="lesson/edit/:lessonId" element={<AddEditLessonPage />} />
             <Route path="quiz/add" element={<AddEditQuizPage />} />
             <Route path="quiz/edit/:quizId" element={<AddEditQuizPage />} />
+            <Route path="question" element={<Question />} />
             <Route path="question/add" element={<AddEditQuestionPage />} />
             <Route path="question/edit/:questionId" element={<AddEditQuestionPage />} />
             <Route path="lesson" element={<LessonList />} />
             <Route path="quiz" element={<Quiz />} />
-            <Route path="question" element={<Question />} />
             <Route path="taxonomy" element={<Taxonomy />} />
             <Route path="taxonomy/add/:type" element={<AddEditTaxonomy  />} />
             <Route path="taxonomy/edit/:type/:id" element={<AddEditTaxonomy  />} />

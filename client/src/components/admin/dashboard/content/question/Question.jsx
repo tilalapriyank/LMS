@@ -63,7 +63,6 @@ const Question = () => {
         setQuestions(coursesWithAuthors);
       } catch (error) {
         setError("Error fetching data. Please try again.");
-        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }

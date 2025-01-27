@@ -17,7 +17,7 @@ const QuestionAnswer = sequelize.define(
         model: "Question",
         key: "id",
       },
-      onDelete: "CASCADE",
+      allowNull: false,
     },
     answerText: {
       type: DataTypes.TEXT,

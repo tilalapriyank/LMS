@@ -17,8 +17,11 @@ import {
 } from "@mui/material";
 
 const Options = ({ options: initialOptions, onChange }) => {
-  const [type, setType] = useState(initialOptions.options.type);
-  const [options, setOptions] = useState(initialOptions.options.options || []);
+  const [type, setType] = useState(initialOptions?.options?.type || "");
+  const [options, setOptions] = useState(
+    initialOptions?.options?.options || []
+  );
+
   const [shortAnswer, setShortAnswer] = useState("");
 
   // Notify parent on data change

@@ -21,6 +21,7 @@ import QuizQuestion from "./QuizQuestion.js";
 import SectionItem from "./SectionItem.js";
 import Setting from "./Setting.js";
 
+
 const setupAssociations = () => {
   UserMeta.belongsTo(User, { foreignKey: "userId" });
   User.hasMany(UserMeta, { foreignKey: "userId" });

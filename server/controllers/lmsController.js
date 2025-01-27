@@ -8,6 +8,10 @@ import quizRespository from "../repositories/quiz.respository.js";
 import coursemetaRepository from "../repositories/coursemeta.repository.js";
 import coursecategoryRepository from "../repositories/coursecategory.repository.js";
 import coursetagRepository from "../repositories/coursetag.repository.js";
+import questionRespository from "../repositories/question.respository.js";
+import questionsetRepository from "../repositories/questionset.repository.js";
+import questionanswerRepository from "../repositories/questionanswer.repository.js";
+import questionmetaRepository from "../repositories/questionmeta.repository.js";
 
 class LMSController {
   async getCategoryNamesByCourseId(req, res) {
@@ -381,18 +385,73 @@ class LMSController {
     }
   }
 
-  async createQuestion(req,res){
+  async createQuestion(req, res) {
     try {
-      const {
-        title,
-        content,
-        settings,
-        taxonomy,
-        userId,
-      } = req.body;
+      const { title, settings, questioncategory, options, status, userId } =
+        req.body;
+
+      if (!title || !options || !options.type || !userId) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      const questionData = {
+        name: title,
+        type: options.type,
+        status,
+        author: userId,
+      };
+
+      // Create question
+      const result = await questionRespository.create(questionData);
+      const questionId = result.dataValues.id;
+
+      // Save meta data
+      const meta = {
+        questionId: questionId,
+        metaKey: "settings",
+        metaValue: JSON.stringify(settings),
+      };
+      await questionmetaRepository.create(meta);
+
+      // Handle categories
+      for (const category of questioncategory.categories) {
+        await questionsetRepository.createQuestionSet({
+          questionId: questionId,
+          categoryId: category,
+        });
+      }
+
+      // Prepare options data
+      let optionsData = [];
+      if (options.type == "short-answer") {
+        optionsData.push({
+          questionId: questionId,
+          answerText: options.shortAnswer,
+          value: options.shortAnswer,
+          isCorrect: 1,
+          order: 1,
+        });
+      } else {
+        for (let i = 0; i < options.options.length; i++) {
+          optionsData.push({
+            questionId: questionId,
+            answerText: options.options[i].value,
+            value: options.options[i].value,
+            isCorrect: options.options[i].correct ? 1 : 0,
+            order: i + 1,
+          });
+        }
+      }
+      await questionanswerRepository.createAnswer(optionsData);
+
+      return res
+        .status(200)
+        .json({ message: "Question created successfully", questionId });
     } catch (error) {
       console.error(error);
-      
+      return res
+        .status(500)
+        .json({ message: "Error creating question", error: error.message });
     }
   }
 }

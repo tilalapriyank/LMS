@@ -1,4 +1,4 @@
-import { QuestionSet } from "../models/QuestionSet.js";
+import QuestionSet from "../models/QuestionSet.js";
 
 class QuestionSetRepository {
   // Create a new question set

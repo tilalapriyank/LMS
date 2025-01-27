@@ -9,23 +9,23 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Title from "../../common/Title";
-import Content from "../../common/Content";
 import Settings from "../../common/Settings";
 import Options from "./Options";
 import { questionSettings } from "../../../../../utils/questionSetting";
 import { useParams, useNavigate } from "react-router-dom";
 import QuestionCategory from "./QuestionCategory ";
 import { UserContext } from "../../../../../context/UserContext";
+import {
+  addOrEditQuestion,
+  questionDataDetails,
+} from "../../../../../api/question";
 
 const AddEditQuestionPage = () => {
   const { questionId } = useParams();
   const navigate = useNavigate();
   const { userId } = useContext(UserContext);
-
   const defaultQuestionData = {
-    userId: userId,
     title: "",
-    content: "",
     options: {
       type: "true-false",
       options: [
@@ -52,7 +52,6 @@ const AddEditQuestionPage = () => {
       setIsEditMode(true);
       const fetchedQuestionData = {
         title: "",
-        content: "",
         options: {
           type: "true-false",
           options: [
@@ -87,7 +86,6 @@ const AddEditQuestionPage = () => {
   const validateFields = () => {
     const errors = {};
     if (!questionData.title) errors.title = "Title is required.";
-    if (!questionData.content) errors.content = "Content is required.";
     if (!questionData.options.type)
       errors.options = "At least one option is required.";
 
@@ -105,17 +103,29 @@ const AddEditQuestionPage = () => {
     return errors;
   };
 
-  const handleSaveQuestion = (status) => {
+  if (!userId) {
+    return <div>Loading...</div>;
+  }
+
+  const handleSaveQuestion = async (status) => {
     const errors = validateFields();
-    console.log(errors);
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
       return;
     }
-    const mode = isEditMode ? "edit" : "create";
-    const updatedQuestionData = { ...questionData, status };
-    console.log(mode, updatedQuestionData);
-    navigate("/dashboard/question");
+    try {
+      const id = isEditMode ? questionId : null;
+      const updatedQuestionData = { ...questionData, status };
+      const updatedQuestionData2 = { ...updatedQuestionData, userId };
+      await addOrEditQuestion(updatedQuestionData2, id);
+      navigate("/dashboard/question");
+    } catch (error) {
+      console.error("Error in handleSaveQuestion:", error);
+    }
+
+    if (!isEditMode) {
+      navigate("/dashboard/question");
+    }
   };
 
   const handleDismissError = (field) => {
@@ -156,11 +166,6 @@ const AddEditQuestionPage = () => {
           <Title
             title={questionData.title}
             onChange={(value) => handleQuestionDataChange("title", value)}
-          />
-
-          <Content
-            content={questionData.content}
-            onChange={(value) => handleQuestionDataChange("content", value)}
           />
 
           <Settings

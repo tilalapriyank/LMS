@@ -122,7 +122,7 @@ const AddEditCoursePage = () => {
       const mode = isEditMode ? "edit" : "create";
       const id = isEditMode ? courseId : null;
       const updatedCourseData = { ...courseData, status };
-      console.log(updatedCourseData);
+      
       await createOrEditCourse(mode, updatedCourseData, id);
       navigate("/dashboard/course");
     } catch (error) {

@@ -1,10 +1,10 @@
-import { QuestionAnswer } from "../models/QuestionAnswer.js";
+import QuestionAnswer  from "../models/QuestionAnswer.js";
 
 class QuestionAnswerRepository {
   // Create a new answer
   async createAnswer(data) {
     try {
-      const answer = await QuestionAnswer.create(data);
+      const answer = await QuestionAnswer.bulkCreate(data);
       return answer;
     } catch (error) {
       throw new Error("Error creating answer: " + error.message);
